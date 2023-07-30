@@ -6,5 +6,10 @@ void setup() {
     M5.Lcd.print("Hello world");
 }
 
-void loop() {}
+void loop() {
+    delay(10);
+    M5.update();
+
+    Serial.println(M5.BtnA.isPressed());
+}
 
