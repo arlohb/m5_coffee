@@ -14,4 +14,5 @@ uploadserial:
 
 compiledb:
 	pio run -t compiledb
+	pio run
 
