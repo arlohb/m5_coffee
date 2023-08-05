@@ -66,12 +66,14 @@ Program::Program() {
     btn = LButton(root);
     btn.SetPos(10, 10);
     btn.SetSize(120, 100);
-    btn.OnPress([]() {
+    btn.OnPress([&]() {
         dbgln("Btn pressed");
+        int prev = std::stoi(label.GetText());
+        label.SetText(std::to_string(prev + 1));
     });
 
     label = LLabel(btn);
-    label.SetText("Hello");
+    label.SetText("0");
     label.Align(LV_ALIGN_CENTER, 0, 0);
 }
 
