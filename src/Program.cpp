@@ -61,18 +61,18 @@ Program::Program() {
     SetupDisplay();
     SetupInput();
 
-    root = lv_scr_act();
+    root = LObject(lv_scr_act());
 
-    btn = lv_btn_create(root);
-    lv_obj_set_pos(btn, 10, 10);
-    lv_obj_set_size(btn, 120, 100);
-    lv_obj_add_event_cb(btn, [](lv_event_t* e) {
+    btn = LButton(root);
+    btn.SetPos(10, 10);
+    btn.SetSize(120, 100);
+    btn.OnPress([]() {
         dbgln("Btn pressed");
-    }, LV_EVENT_PRESSED, NULL);
+    });
 
-    label = lv_label_create(btn);
-    lv_label_set_text(label, "Hello");
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    label = LLabel(btn);
+    label.SetText("Hello");
+    label.Align(LV_ALIGN_CENTER, 0, 0);
 }
 
 void Program::Loop() {

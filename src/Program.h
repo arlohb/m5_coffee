@@ -1,7 +1,8 @@
 #pragma once
 
+#include "LButton.h"
+#include "LLabel.h"
 #include "Utils.h"
-#include <lvgl.h>
 
 class Program {
     private:
@@ -15,9 +16,9 @@ class Program {
         lv_disp_drv_t displayDriver;
         lv_indev_drv_t indevDriver;
 
-        lv_obj_t* root;
-        lv_obj_t* btn;
-        lv_obj_t* label;
+        LObject root;
+        LButton btn;
+        LLabel label;
 
         void SetupDisplay();
         void SetupInput();
