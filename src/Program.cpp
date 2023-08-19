@@ -1,5 +1,8 @@
 #include "Program.h"
 
+#include <WiFi.h>
+#include "Secrets.h"
+
 void Program::SetupDisplay() {
     // This is only used inside this function
     // This can't be in the class as it can't be captured in the lambda
@@ -7,8 +10,8 @@ void Program::SetupDisplay() {
     tft.begin();
     tft.setRotation(1);
 
+    lv_init();
     lv_disp_draw_buf_init(&drawBuffer, colourBuffer, nullptr, width * height / 10);
-
     lv_disp_drv_init(&displayDriver);
 
     displayDriver.hor_res = width;
@@ -53,13 +56,37 @@ void Program::SetupInput() {
     lv_indev_drv_register(&indevDriver);
 }
 
+void Program::SetupNetwork() {
+    WiFi.begin(secrets::ssid, secrets::password);
+
+    while (WiFi.status() != WL_CONNECTED)
+        delay(100);
+
+    dbgln("Getting NTP time...");
+
+    configTime(0, 3600, "pool.ntp.org", "time.nist.gov");
+
+    tm cTime;
+    getLocalTime(&cTime);
+
+    RTC_TimeTypeDef rtcTime;
+    rtcTime.Hours = cTime.tm_hour;
+    rtcTime.Minutes = cTime.tm_min;
+    rtcTime.Seconds = cTime.tm_sec;
+    M5.Rtc.SetTime(&rtcTime);
+}
+
 Program::Program() {
     M5.begin();
+    dbgln("Setup M5");
 
-    lv_init();
-
+    dbgln("Setting up lvgl display...");
     SetupDisplay();
+    dbgln("Setting up lvgl input...");
     SetupInput();
+    dbgln("Connecting to WiFi...");
+    SetupNetwork();
+    dbgln("Setup done");
 
     root = LObject(lv_scr_act());
 
@@ -75,6 +102,9 @@ Program::Program() {
     label = LLabel(btn);
     label.SetText("0");
     label.Align(LV_ALIGN_CENTER, 0, 0);
+
+    timeLabel = LLabel(root);
+    timeLabel.Align(LV_ALIGN_BOTTOM_LEFT, 0, -20);
 }
 
 void Program::Loop() {
@@ -83,6 +113,10 @@ void Program::Loop() {
     lv_tick_inc(1);
     lv_task_handler();
     lv_timer_handler();
+
+    RTC_TimeTypeDef time;
+    M5.Rtc.GetTime(&time);
+    timeLabel.SetText(fmt::format("{:02}:{:02}:{:02}", time.Hours, time.Minutes, time.Seconds));
 
     delay(1);
 }

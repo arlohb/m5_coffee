@@ -19,9 +19,11 @@ class Program {
         LObject root;
         LButton btn;
         LLabel label;
+        LLabel timeLabel;
 
         void SetupDisplay();
         void SetupInput();
+        void SetupNetwork();
 
     public:
         Program();
