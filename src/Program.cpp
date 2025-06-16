@@ -9,7 +9,6 @@ void Program::SetupDisplay() {
     lv_init();
     display = lv_display_create(width, height);
     lv_display_set_buffers(display, colourBuffer, nullptr, sizeof(colourBuffer), LV_DISPLAY_RENDER_MODE_PARTIAL);
-    // lv_display_set_color_format(display, LV_COLOR_FORMAT_RGB565);
 
     lv_display_set_flush_cb(
         display,
