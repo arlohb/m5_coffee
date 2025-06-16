@@ -4,6 +4,17 @@ LObject::LObject(lv_obj_t* ptr):
     ptr(ptr)
 {}
 
+LObject::LObject(LObject&& other) {
+    ptr = other.ptr;
+    other.ptr = 0;
+}
+
+LObject& LObject::operator=(LObject&& other) {
+    ptr = other.ptr;
+    other.ptr = 0;
+    return *this;
+}
+
 void LObject::SetPos(uint16_t x, uint16_t y) {
     lv_obj_set_pos(ptr, x, y);
 }

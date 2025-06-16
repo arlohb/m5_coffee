@@ -10,6 +10,12 @@ public:
     LObject() = default;
     LObject(lv_obj_t *ptr);
 
+    LObject(const LObject&) = delete;
+    LObject& operator=(const LObject&) = delete;
+
+    LObject(LObject &&);
+    LObject& operator=(LObject&&);
+
     void SetPos(uint16_t x, uint16_t y);
     void SetSize(uint16_t x, uint16_t y);
     void Align(lv_align_t alignment, uint16_t x, uint16_t y);
