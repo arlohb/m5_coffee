@@ -29,7 +29,5 @@ public:
     Program();
 
     void Loop();
-
-    void SetBrightness(uint8_t brightness);
 };
 

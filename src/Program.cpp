@@ -1,15 +1,11 @@
 #include "Program.h"
 
 #include <WiFi.h>
+#include <M5Unified.h>
+#include <M5UnitLCD.h>
 #include "Secrets.h"
 
 void Program::SetupDisplay() {
-    // This is only used inside this function
-    // This can't be in the class as it can't be captured in the lambda
-    static TFT_eSPI tft(width, height);
-    tft.begin();
-    tft.setRotation(1);
-
     lv_init();
     lv_disp_draw_buf_init(&drawBuffer, colourBuffer, nullptr, width * height / 10);
     lv_disp_drv_init(&displayDriver);
@@ -25,10 +21,10 @@ void Program::SetupDisplay() {
         uint32_t w = area->x2 - area->x1 + 1;
         uint32_t h = area->y2 - area->y1 + 1;
 
-        tft.startWrite();
-        tft.setAddrWindow(area->x1, area->y1, w, h);
-        tft.pushColors((uint16_t*)&colour->full, w * h, true);
-        tft.endWrite();
+        M5.Display.startWrite();
+        M5.Display.setAddrWindow(area->x1, area->y1, w, h);
+        M5.Display.pushPixels((uint16_t*)&colour->full, w * h, true);
+        M5.Display.endWrite();
 
         lv_disp_flush_ready(displayDriver);
     };
@@ -44,13 +40,20 @@ void Program::SetupInput() {
     indevDriver.type = LV_INDEV_TYPE_POINTER;
 
     indevDriver.read_cb = [](lv_indev_drv_t* indevDriver, lv_indev_data_t* data) {
-        if (M5.Touch.ispressed()) {
+        int count = M5.Touch.getCount();
+
+        if (count > 0) {
             data->state = LV_INDEV_STATE_PRESSED;
-            Point pos = M5.Touch.getPressPoint();
-            data->point.x = pos.x;
-            data->point.y = pos.y;
-        } else
+
+            // LVGL doesn't support multi touch
+            // Just use the last point
+            auto point = M5.Touch.getTouchPointRaw(count - 1);
+            data->point.x = point.x;
+            data->point.y = point.y;
+
+        } else {
             data->state = LV_INDEV_STATE_RELEASED;
+        }
     };
 
     lv_indev_drv_register(&indevDriver);
@@ -69,15 +72,18 @@ void Program::SetupNetwork() {
     tm cTime;
     getLocalTime(&cTime);
 
-    RTC_TimeTypeDef rtcTime;
-    rtcTime.Hours = cTime.tm_hour;
-    rtcTime.Minutes = cTime.tm_min;
-    rtcTime.Seconds = cTime.tm_sec;
-    M5.Rtc.SetTime(&rtcTime);
+    m5::rtc_time_t rtcTime;
+    rtcTime.hours = cTime.tm_hour;
+    rtcTime.minutes = cTime.tm_min;
+    rtcTime.seconds = cTime.tm_sec;
+    M5.Rtc.setTime(rtcTime);
 }
 
 Program::Program() {
-    M5.begin();
+    auto config = M5.config();
+    config.fallback_board = m5::board_t::board_M5StackCore2;
+    M5.begin(config);
+
     dbgln("Setup M5");
 
     dbgln("Setting up lvgl display...");
@@ -114,15 +120,10 @@ void Program::Loop() {
     lv_task_handler();
     lv_timer_handler();
 
-    RTC_TimeTypeDef time;
-    M5.Rtc.GetTime(&time);
-    timeLabel.SetText(fmt::format("{:02}:{:02}:{:02}", time.Hours, time.Minutes, time.Seconds));
+    m5::rtc_time_t time;
+    M5.Rtc.getTime(&time);
+    timeLabel.SetText(fmt::format("{:02}:{:02}:{:02}", time.hours, time.minutes, time.seconds));
 
     delay(1);
-}
-
-void Program::SetBrightness(uint8_t brightness) {
-    // From 2500 - 3300
-    M5.Axp.SetLcdVoltage(2500 + (brightness * 800 / 255));
 }
 
