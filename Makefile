@@ -2,10 +2,10 @@ make:
 	pio run
 
 upload:
-	pio run -t upload
+	pio run --target upload
 
 serial:
-	pio device monitor -b 115200
+	pio device monitor --baud 115200
 
 uploadserial:
 	make upload
@@ -13,6 +13,6 @@ uploadserial:
 	make serial
 
 compiledb:
-	pio run -t compiledb
+	pio run --target compiledb
 	pio run
 
