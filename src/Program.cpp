@@ -7,56 +7,52 @@
 
 void Program::SetupDisplay() {
     lv_init();
-    lv_disp_draw_buf_init(&drawBuffer, colourBuffer, nullptr, width * height / 10);
-    lv_disp_drv_init(&displayDriver);
+    display = lv_display_create(width, height);
+    lv_display_set_buffers(display, colourBuffer, nullptr, sizeof(colourBuffer), LV_DISPLAY_RENDER_MODE_PARTIAL);
+    // lv_display_set_color_format(display, LV_COLOR_FORMAT_RGB565);
 
-    displayDriver.hor_res = width;
-    displayDriver.ver_res = height;
+    lv_display_set_flush_cb(
+        display,
+        [] (
+            lv_display_t* display,
+            const lv_area_t* area,
+            unsigned char* colour
+        ) {
+            uint32_t w = area->x2 - area->x1 + 1;
+            uint32_t h = area->y2 - area->y1 + 1;
 
-    displayDriver.flush_cb = [](
-        lv_disp_drv_t* displayDriver,
-        const lv_area_t* area,
-        lv_color_t* colour
-    ) {
-        uint32_t w = area->x2 - area->x1 + 1;
-        uint32_t h = area->y2 - area->y1 + 1;
+            M5.Display.startWrite();
+            M5.Display.setAddrWindow(area->x1, area->y1, w, h);
+            M5.Display.writePixels((uint16_t*)colour, w * h, true);
+            M5.Display.endWrite();
 
-        M5.Display.startWrite();
-        M5.Display.setAddrWindow(area->x1, area->y1, w, h);
-        M5.Display.pushPixels((uint16_t*)&colour->full, w * h, true);
-        M5.Display.endWrite();
-
-        lv_disp_flush_ready(displayDriver);
-    };
-
-    displayDriver.draw_buf = &drawBuffer;
-
-    lv_disp_drv_register(&displayDriver);
+            lv_display_flush_ready(display);
+        }
+    );
 }
 
 void Program::SetupInput() {
-    lv_indev_drv_init(&indevDriver);
+    indev = lv_indev_create();
+    lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
+    lv_indev_set_read_cb(
+        indev,
+        [] (lv_indev_t* indev, lv_indev_data_t* data) {
+            int count = M5.Touch.getCount();
 
-    indevDriver.type = LV_INDEV_TYPE_POINTER;
+            if (count > 0) {
+                data->state = LV_INDEV_STATE_PRESSED;
 
-    indevDriver.read_cb = [](lv_indev_drv_t* indevDriver, lv_indev_data_t* data) {
-        int count = M5.Touch.getCount();
+                // LVGL doesn't support multi touch
+                // Just use the last point
+                auto point = M5.Touch.getTouchPointRaw(count - 1);
+                data->point.x = point.x;
+                data->point.y = point.y;
 
-        if (count > 0) {
-            data->state = LV_INDEV_STATE_PRESSED;
-
-            // LVGL doesn't support multi touch
-            // Just use the last point
-            auto point = M5.Touch.getTouchPointRaw(count - 1);
-            data->point.x = point.x;
-            data->point.y = point.y;
-
-        } else {
-            data->state = LV_INDEV_STATE_RELEASED;
+            } else {
+                data->state = LV_INDEV_STATE_RELEASED;
+            }
         }
-    };
-
-    lv_indev_drv_register(&indevDriver);
+    );
 }
 
 void Program::SetupNetwork() {

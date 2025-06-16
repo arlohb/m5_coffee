@@ -9,12 +9,11 @@ private:
     inline static const int width = 320;
     inline static const int height = 240;
 
-    lv_disp_draw_buf_t drawBuffer;
-    // I do not know what the / 10 is for
+    lv_display_t* display;
+    // Isn't the full size of the screen as it is drawn partially
     lv_color_t colourBuffer[width * height / 10];
 
-    lv_disp_drv_t displayDriver;
-    lv_indev_drv_t indevDriver;
+    lv_indev_t* indev;
 
     LObject root;
     LButton btn;
