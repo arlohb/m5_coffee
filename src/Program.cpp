@@ -7,6 +7,7 @@
 
 void Program::SetupDisplay() {
     lv_init();
+    lv_tick_set_cb(xTaskGetTickCount);
     display = lv_display_create(width, height);
     lv_display_set_buffers(display, colourBuffer, nullptr, sizeof(colourBuffer), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
@@ -123,8 +124,6 @@ Program::Program() {
 void Program::Loop() {
     M5.update();
 
-    lv_tick_inc(1);
-    lv_task_handler();
     lv_timer_handler();
 
     m5::rtc_time_t time;
