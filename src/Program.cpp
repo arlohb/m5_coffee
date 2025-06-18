@@ -96,19 +96,7 @@ Program::Program() {
     timeLabel.align(LV_ALIGN_TOP_LEFT, 20, 20);
     
     timer = Timer();
-    
-    LButton playBtn(root);
-    playBtn.setLabel("Play");
-    playBtn.setSize(80, 80);
-    playBtn.align(LV_ALIGN_CENTER, 0, 70);
-    playBtn.onPress<Timer>([](Timer* timer) {
-        dbgln("Play button pressed");
-        if (timer->isRunning()) {
-            timer->stop();
-        } else {
-            timer->start();
-        }
-    }, &*timer);
+    timer->registerOnPress();
 }
 
 void Program::loop() {
