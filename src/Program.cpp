@@ -94,12 +94,14 @@ Program::Program() {
 
     timeLabel = LLabel(root);
     timeLabel.align(LV_ALIGN_TOP_LEFT, 20, 20);
+    lv_obj_set_style_text_font(timeLabel.ptr, &lv_font_fira_code_20, LV_STATE_DEFAULT);
     
     timer = Timer();
     timer->registerOnPress();
     
     batteryLabel = LLabel(root);
     batteryLabel.align(LV_ALIGN_BOTTOM_LEFT, 20, -20);
+    lv_obj_set_style_text_font(batteryLabel.ptr, &lv_font_fira_code_20, LV_STATE_DEFAULT);
 }
 
 void Program::loop() {
