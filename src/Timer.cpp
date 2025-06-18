@@ -21,11 +21,6 @@ void Timer::update() {
     label.SetText(fmt::format("{:02}.{:01}s", ms / 1000, ms % 1000 / 100));
 }
 
-void Timer::reset() {
-    startTime = std::chrono::steady_clock::now();
-    label.SetText("00.0s");
-};
-
 void Timer::start() {
     if (running) return;
 

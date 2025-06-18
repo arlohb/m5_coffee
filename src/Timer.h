@@ -8,7 +8,6 @@ public:
     Timer();
     
     void update();
-    void reset();
     void start();
     void stop();
     bool isRunning() const { return running; }

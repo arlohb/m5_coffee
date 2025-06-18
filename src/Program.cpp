@@ -109,7 +109,7 @@ Program::Program() {
     LButton playBtn(root);
     playBtn.SetLabel("Play");
     playBtn.SetSize(80, 80);
-    playBtn.Align(LV_ALIGN_CENTER, 50, 70);
+    playBtn.Align(LV_ALIGN_CENTER, 0, 70);
     playBtn.OnPress<Timer>([](Timer* timer) {
         dbgln("Play button pressed");
         if (timer->isRunning()) {
@@ -117,15 +117,6 @@ Program::Program() {
         } else {
             timer->start();
         }
-    }, &*timer);
-    
-    LButton resetBtn(root);
-    resetBtn.SetLabel("Reset");
-    resetBtn.SetSize(80, 80);
-    resetBtn.Align(LV_ALIGN_CENTER, -50, 70);
-    resetBtn.OnPress<Timer>([](Timer* timer) {
-        dbgln("Reset button pressed");
-        timer->reset();
     }, &*timer);
 }
 
