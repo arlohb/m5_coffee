@@ -103,6 +103,30 @@ Program::Program() {
 
     timeLabel = LLabel(root);
     timeLabel.Align(LV_ALIGN_BOTTOM_LEFT, 0, -20);
+    
+    timer = Timer();
+    
+    LButton playBtn(root);
+    playBtn.SetLabel("Play");
+    playBtn.SetSize(80, 80);
+    playBtn.Align(LV_ALIGN_CENTER, 50, 70);
+    playBtn.OnPress<Timer>([](Timer* timer) {
+        dbgln("Play button pressed");
+        if (timer->isRunning()) {
+            timer->stop();
+        } else {
+            timer->start();
+        }
+    }, &*timer);
+    
+    LButton resetBtn(root);
+    resetBtn.SetLabel("Reset");
+    resetBtn.SetSize(80, 80);
+    resetBtn.Align(LV_ALIGN_CENTER, -50, 70);
+    resetBtn.OnPress<Timer>([](Timer* timer) {
+        dbgln("Reset button pressed");
+        timer->reset();
+    }, &*timer);
 }
 
 void Program::Loop() {
@@ -115,6 +139,8 @@ void Program::Loop() {
     m5::rtc_time_t time;
     M5.Rtc.getTime(&time);
     timeLabel.SetText(fmt::format("{:02}:{:02}:{:02}", time.hours, time.minutes, time.seconds));
+    
+    timer->update();
 
     delay(1);
 }

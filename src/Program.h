@@ -3,6 +3,7 @@
 #include "LButton.h"
 #include "LLabel.h"
 #include "Utils.h"
+#include "Timer.h"
 
 class Program {
 private:
@@ -18,6 +19,8 @@ private:
     LObject root;
     LButton btn;
     LLabel timeLabel;
+    
+    std::optional<Timer> timer;
 
     void SetupDisplay();
     void SetupInput();
