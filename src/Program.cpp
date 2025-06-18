@@ -97,6 +97,9 @@ Program::Program() {
     
     timer = Timer();
     timer->registerOnPress();
+    
+    batteryLabel = LLabel(root);
+    batteryLabel.align(LV_ALIGN_BOTTOM_LEFT, 20, -20);
 }
 
 void Program::loop() {
@@ -109,6 +112,22 @@ void Program::loop() {
     timeLabel.setText(fmt::format("{:02}:{:02}:{:02}", time.hours, time.minutes, time.seconds));
     
     timer->update();
+    
+    static auto icons = std::array<const char*, 5>{
+        LV_SYMBOL_BATTERY_EMPTY,
+        LV_SYMBOL_BATTERY_1,
+        LV_SYMBOL_BATTERY_2,
+        LV_SYMBOL_BATTERY_3,
+        LV_SYMBOL_BATTERY_FULL
+    };
+    
+    auto icon = icons[std::clamp(M5.Power.getBatteryLevel() / 20, 0, 4)];
+    
+    batteryLabel.setText(fmt::format("{}{} {}%",
+        icon,
+        M5.Power.isCharging() ? LV_SYMBOL_CHARGE : "",
+        M5.Power.getBatteryLevel()
+    ));
 
     delay(1);
 }

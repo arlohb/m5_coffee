@@ -18,6 +18,7 @@ private:
 
     LObject root;
     LLabel timeLabel;
+    LLabel batteryLabel;
     
     std::optional<Timer> timer;
 
