@@ -17,7 +17,6 @@ private:
 
     LObject root;
     LButton btn;
-    LLabel label;
     LLabel timeLabel;
 
     void SetupDisplay();

@@ -92,17 +92,14 @@ Program::Program() {
     root = LObject(lv_scr_act());
 
     btn = LButton(root);
+    btn.SetLabel("0");
     btn.SetPos(10, 10);
     btn.SetSize(120, 100);
-    btn.OnPress([&]() {
+    btn.OnPress<LLabel>([](LLabel* label) {
         dbgln("Btn pressed");
-        int prev = std::stoi(label.GetText());
-        label.SetText(std::to_string(prev + 1));
-    });
-
-    label = LLabel(btn);
-    label.SetText("0");
-    label.Align(LV_ALIGN_CENTER, 0, 0);
+        int prev = std::stoi(label->GetText());
+        label->SetText(std::to_string(prev + 1));
+    }, &*btn.label);
 
     timeLabel = LLabel(root);
     timeLabel.Align(LV_ALIGN_BOTTOM_LEFT, 0, -20);
