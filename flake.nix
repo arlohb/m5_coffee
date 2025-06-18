@@ -13,6 +13,8 @@
             clang-tools_16
             platformio
 
+            python3
+
             (let
               python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
             in pkgs.writeShellScriptBin "fix-esptool" ''
