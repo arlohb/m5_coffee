@@ -17,7 +17,6 @@ private:
     lv_indev_t* indev;
 
     LObject root;
-    LButton btn;
     LLabel timeLabel;
     
     std::optional<Timer> timer;
