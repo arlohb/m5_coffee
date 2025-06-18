@@ -12,6 +12,13 @@
           buildInputs = with pkgs; [
             clang-tools_16
             platformio
+
+            (let
+              python = pkgs.python3.withPackages (ps: with ps; [ pip ]);
+            in pkgs.writeShellScriptBin "fix-esptool" ''
+              ${python}/bin/pip install pyserial \
+                --target .pio/packages/tool-esptoolpy
+            '')
           ];
         };
       }

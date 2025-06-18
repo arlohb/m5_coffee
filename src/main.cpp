@@ -1,12 +1,13 @@
 #include "Program.h"
 
-Program* program;
+extern "C" void app_main() {
+    initArduino();
 
-void setup() {
-    program = new Program();
-}
+    // Colour buffer is too big for the stack
+    Program* program = new Program();
 
-void loop() {
-    program->Loop();
+    while (true) {
+        program->Loop();
+    }
 }
 
