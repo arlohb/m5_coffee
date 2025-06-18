@@ -4,11 +4,11 @@ LButton::LButton(LObject& parent) {
     ptr = lv_btn_create(parent.ptr);
 }
 
-void LButton::SetLabel(const std::string& text) {
+void LButton::setLabel(const std::string& text) {
     if (!label) {
         label = LLabel(*this);
-        label->Align(LV_ALIGN_CENTER, 0, 0);
+        label->align(LV_ALIGN_CENTER, 0, 0);
     }
 
-    label->SetText(text);
+    label->setText(text);
 }

@@ -17,14 +17,14 @@ LObject& LObject::operator=(LObject&& other) {
     return *this;
 }
 
-void LObject::SetPos(uint16_t x, uint16_t y) {
+void LObject::setPos(uint16_t x, uint16_t y) {
     lv_obj_set_pos(ptr, x, y);
 }
 
-void LObject::SetSize(uint16_t x, uint16_t y) {
+void LObject::setSize(uint16_t x, uint16_t y) {
     lv_obj_set_size(ptr, x, y);
 }
 
-void LObject::Align(lv_align_t alignment, int32_t x, int32_t y) {
+void LObject::align(lv_align_t alignment, int32_t x, int32_t y) {
     lv_obj_align(ptr, alignment, x, y);
 }

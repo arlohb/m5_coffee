@@ -7,7 +7,7 @@ extern "C" void app_main() {
     Program* program = new Program();
 
     while (true) {
-        program->Loop();
+        program->loop();
     }
 }
 

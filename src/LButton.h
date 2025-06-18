@@ -9,7 +9,7 @@ public:
     LButton() = default;
     LButton(LObject& parent);
     
-    void SetLabel(const std::string& text);
+    void setLabel(const std::string& text);
     
 public:
     std::optional<LLabel> label;

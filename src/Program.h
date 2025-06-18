@@ -21,13 +21,13 @@ private:
     
     std::optional<Timer> timer;
 
-    void SetupDisplay();
-    void SetupInput();
-    void SetupNetwork();
+    void setupDisplay();
+    void setupInput();
+    void setupNetwork();
 
 public:
     Program();
 
-    void Loop();
+    void loop();
 };
 

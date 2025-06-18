@@ -5,7 +5,7 @@
 #include <M5UnitLCD.h>
 #include "Secrets.h"
 
-void Program::SetupDisplay() {
+void Program::setupDisplay() {
     lv_init();
     lv_tick_set_cb(xTaskGetTickCount);
     display = lv_display_create(width, height);
@@ -31,7 +31,7 @@ void Program::SetupDisplay() {
     );
 }
 
-void Program::SetupInput() {
+void Program::setupInput() {
     indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(
@@ -55,7 +55,7 @@ void Program::SetupInput() {
     );
 }
 
-void Program::SetupNetwork() {
+void Program::setupNetwork() {
     WiFi.begin(secrets::ssid, secrets::password);
 
     while (WiFi.status() != WL_CONNECTED)
@@ -83,25 +83,25 @@ Program::Program() {
     dbgln("Setup M5");
 
     dbgln("Setting up lvgl display...");
-    SetupDisplay();
+    setupDisplay();
     dbgln("Setting up lvgl input...");
-    SetupInput();
+    setupInput();
     dbgln("Connecting to WiFi...");
-    SetupNetwork();
+    setupNetwork();
     dbgln("Setup done");
 
     root = LObject(lv_scr_act());
 
     timeLabel = LLabel(root);
-    timeLabel.Align(LV_ALIGN_TOP_LEFT, 20, 20);
+    timeLabel.align(LV_ALIGN_TOP_LEFT, 20, 20);
     
     timer = Timer();
     
     LButton playBtn(root);
-    playBtn.SetLabel("Play");
-    playBtn.SetSize(80, 80);
-    playBtn.Align(LV_ALIGN_CENTER, 0, 70);
-    playBtn.OnPress<Timer>([](Timer* timer) {
+    playBtn.setLabel("Play");
+    playBtn.setSize(80, 80);
+    playBtn.align(LV_ALIGN_CENTER, 0, 70);
+    playBtn.onPress<Timer>([](Timer* timer) {
         dbgln("Play button pressed");
         if (timer->isRunning()) {
             timer->stop();
@@ -111,14 +111,14 @@ Program::Program() {
     }, &*timer);
 }
 
-void Program::Loop() {
+void Program::loop() {
     M5.update();
 
     lv_timer_handler();
 
     m5::rtc_time_t time;
     M5.Rtc.getTime(&time);
-    timeLabel.SetText(fmt::format("{:02}:{:02}:{:02}", time.hours, time.minutes, time.seconds));
+    timeLabel.setText(fmt::format("{:02}:{:02}:{:02}", time.hours, time.minutes, time.seconds));
     
     timer->update();
 

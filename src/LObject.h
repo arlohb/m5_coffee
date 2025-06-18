@@ -14,21 +14,21 @@ public:
     LObject(LObject &&);
     LObject& operator=(LObject&&);
 
-    void SetPos(uint16_t x, uint16_t y);
-    void SetSize(uint16_t x, uint16_t y);
-    void Align(lv_align_t alignment, int32_t x, int32_t y);
+    void setPos(uint16_t x, uint16_t y);
+    void setSize(uint16_t x, uint16_t y);
+    void align(lv_align_t alignment, int32_t x, int32_t y);
 
     template<typename T>
-    void AddCallback(void(*callback)(T*), T* data, lv_event_code_t event);
+    void addCallback(void(*callback)(T*), T* data, lv_event_code_t event);
     template<typename T>
-    void OnPress(void(*callback)(T*), T* data);
+    void onPress(void(*callback)(T*), T* data);
 
 public:
     lv_obj_t* ptr;
 };
 
 template<typename T>
-void LObject::AddCallback(void(*callback)(T*), T* userData, lv_event_code_t event) {
+void LObject::addCallback(void(*callback)(T*), T* userData, lv_event_code_t event) {
     struct Data {
         T* data;
         void(*callback)(T*);
@@ -46,6 +46,6 @@ void LObject::AddCallback(void(*callback)(T*), T* userData, lv_event_code_t even
 }
 
 template<typename T>
-void LObject::OnPress(void(*callback)(T*), T* data) {
-    AddCallback<T>(callback, data, LV_EVENT_PRESSED);
+void LObject::onPress(void(*callback)(T*), T* data) {
+    addCallback<T>(callback, data, LV_EVENT_PRESSED);
 }

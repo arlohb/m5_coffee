@@ -7,7 +7,7 @@ public:
     LLabel() = default;
     LLabel(LObject& parent);
 
-    char* GetText();
-    void SetText(std::string text);
+    char* getText();
+    void setText(std::string text);
 };
 
