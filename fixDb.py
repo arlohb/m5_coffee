@@ -10,6 +10,8 @@ try:
     f = open("compile_commands.json", "w")
     f.write(contents)
     f.close()
+
+    print("fixDb ran successfully")
 except Exception as e:
     print("fixDb failed with error : ", e)
 
