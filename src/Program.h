@@ -25,7 +25,7 @@ private:
     void setupDisplay();
     void setupInput();
     void setupTheme();
-    void setupNetwork();
+    static void setupNetworkTask(void* arg);
 
 public:
     Program();

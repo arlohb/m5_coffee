@@ -66,7 +66,7 @@ void Program::setupTheme() {
     lv_display_set_theme(display, theme);
 }
 
-void Program::setupNetwork() {
+void Program::setupNetworkTask(void* arg) {
     WiFi.begin(secrets::ssid, secrets::password);
 
     while (WiFi.status() != WL_CONNECTED)
@@ -84,12 +84,17 @@ void Program::setupNetwork() {
     rtcTime.minutes = cTime.tm_min;
     rtcTime.seconds = cTime.tm_sec;
     M5.Rtc.setTime(rtcTime);
+    
+    vTaskDelete(nullptr);
 }
 
 Program::Program() {
     auto config = M5.config();
     config.fallback_board = m5::board_t::board_M5StackCore2;
     M5.begin(config);
+
+    dbgln("Starting WiFi task...");
+    xTaskCreate(setupNetworkTask, "WiFiTask", 4096, nullptr, 1, nullptr);
 
     dbgln("Setup M5");
 
@@ -99,8 +104,6 @@ Program::Program() {
     setupInput();
     dbgln("Setting up lvgl theme...");
     setupTheme();
-    dbgln("Connecting to WiFi...");
-    setupNetwork();
     dbgln("Setup done");
 
     root = LObject(lv_scr_act());
