@@ -22,6 +22,19 @@ void Timer::registerOnPress() {
         } else {
             timer->start();
         }
+
+        M5.Power.setVibration(255);
+        M5.Speaker.tone(1000, 60);
+
+        xTimerStart(xTimerCreate(
+            "VibrationOff",
+            pdMS_TO_TICKS(30),
+            pdFALSE,
+            nullptr,
+            [] (TimerHandle_t) {
+                M5.Power.setVibration(0);
+            }
+        ), 0);
     }, this);
 }
 
