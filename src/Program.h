@@ -24,6 +24,7 @@ private:
 
     void setupDisplay();
     void setupInput();
+    void setupTheme();
     void setupNetwork();
 
 public:

@@ -55,6 +55,17 @@ void Program::setupInput() {
     );
 }
 
+void Program::setupTheme() {
+    lv_theme_t* theme = lv_theme_default_init(
+        display,
+        lv_palette_main(LV_PALETTE_PINK),
+        lv_palette_main(LV_PALETTE_LIGHT_BLUE),
+        true,
+        &lv_font_fira_code_32
+    );
+    lv_display_set_theme(display, theme);
+}
+
 void Program::setupNetwork() {
     WiFi.begin(secrets::ssid, secrets::password);
 
@@ -86,6 +97,8 @@ Program::Program() {
     setupDisplay();
     dbgln("Setting up lvgl input...");
     setupInput();
+    dbgln("Setting up lvgl theme...");
+    setupTheme();
     dbgln("Connecting to WiFi...");
     setupNetwork();
     dbgln("Setup done");
