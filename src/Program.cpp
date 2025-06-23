@@ -32,6 +32,9 @@ void Program::setupDisplay() {
 }
 
 void Program::setupInput() {
+    // TODO: Should be buffering the input
+    // Could start a task to do this
+    // https://docs.lvgl.io/master/details/main-modules/indev.html#buffered-reading
     indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(
