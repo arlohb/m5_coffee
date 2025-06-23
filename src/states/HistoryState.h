@@ -5,13 +5,11 @@
 #include "Timer.h"
 #include "StatusBar.h"
 
-class MainState : public LvglState {
+class HistoryState : public LvglState {
 public:
-    MainState();
-    ~MainState() override = default;
+    HistoryState();
 
     State* loop() override;
 
 private:
-    Timer timer;
 };

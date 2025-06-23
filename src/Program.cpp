@@ -121,7 +121,10 @@ void Program::loop() {
 
     lv_timer_handler();
 
-    state->loop();
+    State* newState = state->loop();
+    if (newState) {
+        state = std::unique_ptr<State>(newState);
+    }
 
     delay(1);
 }

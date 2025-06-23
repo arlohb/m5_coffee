@@ -4,5 +4,5 @@ class State {
 public:
     virtual ~State() = default;
     
-    virtual void loop() = 0;
+    virtual State* loop() = 0;
 };

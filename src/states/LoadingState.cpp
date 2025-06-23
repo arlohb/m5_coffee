@@ -2,4 +2,6 @@
 
 LoadingState::LoadingState() {}
 
-void LoadingState::loop() {}
+State* LoadingState::loop() {
+    return nullptr;
+}

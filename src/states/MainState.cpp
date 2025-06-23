@@ -6,7 +6,11 @@ MainState::MainState() : LvglState("Main") {
     timer.registerOnPress();
 }
 
-void MainState::loop() {
-    LvglState::loop();
+State* MainState::loop() {
+    State* newState = LvglState::loop();
+    if (newState) return newState;
+
     timer.update();
+    
+    return nullptr;
 }
