@@ -4,6 +4,8 @@
 
 class StatusBar {
 public:
+    static const int HEIGHT = 32;
+
     StatusBar();
     ~StatusBar();
 

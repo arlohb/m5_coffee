@@ -7,7 +7,7 @@ StatusBar::StatusBar() {
     lv_obj_t* root = lv_scr_act();
     
     bar = lv_obj_create(root);
-    lv_obj_set_size(bar, LV_HOR_RES, 32);
+    lv_obj_set_size(bar, LV_HOR_RES, HEIGHT);
     lv_obj_align(bar, LV_ALIGN_TOP_MID, 0, 0);
     lv_obj_set_style_border_side(bar, LV_BORDER_SIDE_NONE, LV_STATE_DEFAULT);
     lv_obj_set_style_radius(bar, 0, LV_STATE_DEFAULT);
