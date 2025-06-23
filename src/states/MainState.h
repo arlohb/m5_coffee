@@ -1,18 +1,17 @@
 #pragma once
 
 #include <lvgl.h>
-#include "State.h"
+#include "LvglState.h"
 #include "Timer.h"
 #include "StatusBar.h"
 
-class MainState : public State {
+class MainState : public LvglState {
 public:
     MainState();
+    ~MainState() override = default;
 
     void loop() override;
 
 private:
-    StatusBar statusBar;
-
     Timer timer;
 };

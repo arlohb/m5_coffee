@@ -2,11 +2,11 @@
 
 #include <M5Unified.h>
 
-MainState::MainState() {
+MainState::MainState() : LvglState("Main") {
     timer.registerOnPress();
 }
 
 void MainState::loop() {
-    statusBar.loop();
+    LvglState::loop();
     timer.update();
 }
