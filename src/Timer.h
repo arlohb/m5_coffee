@@ -6,6 +6,7 @@
 class Timer {
 public:
     Timer();
+    ~Timer();
 
     // Register the button press callback.
     // Called separately from the constructor because it relies on the address of this,

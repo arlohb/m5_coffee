@@ -16,6 +16,10 @@ Timer::Timer() {
     startTime = std::chrono::steady_clock::now();
 }
 
+Timer::~Timer() {
+    lv_obj_delete(btn);
+}
+
 void Timer::registerOnPress() {
     lv_obj_add_event_cb(btn, [] (lv_event_t* e) {
         Timer* timer = (Timer*)lv_event_get_user_data(e);
