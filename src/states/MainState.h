@@ -3,6 +3,7 @@
 #include <lvgl.h>
 #include "State.h"
 #include "Timer.h"
+#include "StatusBar.h"
 
 class MainState : public State {
 public:
@@ -11,8 +12,7 @@ public:
     void loop() override;
 
 private:
-    lv_obj_t* timeLabel;
-    lv_obj_t* batteryLabel;
-    
+    StatusBar statusBar;
+
     Timer timer;
 };
