@@ -1,7 +1,9 @@
 #pragma once
 
+#include <memory>
 #include "Utils.h"
 #include "Timer.h"
+#include "states/State.h"
 
 class Program {
 private:
@@ -13,12 +15,8 @@ private:
     lv_color_t colourBuffer[width * height / 10];
 
     lv_indev_t* indev;
-
-    lv_obj_t* root;
-    lv_obj_t* timeLabel;
-    lv_obj_t* batteryLabel;
     
-    std::optional<Timer> timer;
+    std::unique_ptr<State> state;
 
     void setupDisplay();
     void setupInput();
