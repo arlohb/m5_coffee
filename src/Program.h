@@ -1,7 +1,5 @@
 #pragma once
 
-#include "LButton.h"
-#include "LLabel.h"
 #include "Utils.h"
 #include "Timer.h"
 
@@ -16,9 +14,9 @@ private:
 
     lv_indev_t* indev;
 
-    LObject root;
-    LLabel timeLabel;
-    LLabel batteryLabel;
+    lv_obj_t* root;
+    lv_obj_t* timeLabel;
+    lv_obj_t* batteryLabel;
     
     std::optional<Timer> timer;
 

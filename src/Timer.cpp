@@ -4,20 +4,22 @@
 #include "Utils.h"
 
 Timer::Timer() {
-    auto root = LObject(lv_scr_act());
-    btn = LButton(root);
-    btn.align(LV_ALIGN_CENTER, 0, 0);
-    btn.setSize(120, 80);
+    auto root = lv_scr_act();
+    btn = lv_btn_create(root);
+    lv_obj_align(btn, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_size(btn, 120, 80);
     
-    label = LLabel(btn);
-    label.setText("00.0");
-    label.align(LV_ALIGN_LEFT_MID, 8, 0);
+    label = lv_label_create(btn);
+    lv_label_set_text(label, "00.0");
+    lv_obj_align(label, LV_ALIGN_LEFT_MID, 8, 0);
 
     startTime = std::chrono::steady_clock::now();
 }
 
 void Timer::registerOnPress() {
-    btn.onPress<Timer>([](Timer* timer) {
+    lv_obj_add_event_cb(btn, [] (lv_event_t* e) {
+        Timer* timer = (Timer*)lv_event_get_user_data(e);
+
         if (timer->isRunning()) {
             timer->stop();
         } else {
@@ -36,7 +38,7 @@ void Timer::registerOnPress() {
                 M5.Power.setVibration(0);
             }
         ), 0);
-    }, this);
+    }, LV_EVENT_PRESSED, this);
 }
 
 void Timer::update() {
@@ -45,7 +47,7 @@ void Timer::update() {
     auto now = std::chrono::steady_clock::now();
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - startTime).count();
 
-    label.setText(fmt::format("{:02}.{:01}", ms / 1000, ms % 1000 / 100));
+    lv_label_set_text(label, fmt::format("{:02}.{:01}", ms / 1000, ms % 1000 / 100).c_str());
 }
 
 void Timer::start() {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chrono>
-#include "LButton.h"
+#include <lvgl.h>
 
 class Timer {
 public:
@@ -22,6 +22,6 @@ private:
     bool running = false;
 
 public:
-    LButton btn;
-    LLabel label;
+    lv_obj_t* btn;
+    lv_obj_t* label;
 };
