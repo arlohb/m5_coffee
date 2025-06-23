@@ -123,13 +123,16 @@ Program::Program() {
     lv_obj_set_style_text_font(batteryLabel.ptr, &lv_font_fira_code_20, LV_STATE_DEFAULT);
     
     LButton offBtn(root);
-    offBtn.setLabel(LV_SYMBOL_POWER);
     offBtn.align(LV_ALIGN_TOP_RIGHT, -12, 12);
     offBtn.setSize(48, 48);
     offBtn.onPress<void>([] (void*) {
         M5.Power.deepSleep(0, true);
     }, nullptr);
     lv_obj_set_style_bg_color(offBtn.ptr, lv_theme_get_color_secondary(root.ptr), LV_STATE_DEFAULT);
+    
+    LLabel offBtnLabel(offBtn);
+    offBtnLabel.setText(LV_SYMBOL_POWER);
+    offBtnLabel.align(LV_ALIGN_CENTER, 0, 0);
 }
 
 void Program::loop() {

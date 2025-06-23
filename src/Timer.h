@@ -23,4 +23,5 @@ private:
 
 public:
     LButton btn;
+    LLabel label;
 };
