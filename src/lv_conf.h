@@ -591,7 +591,7 @@
 #define LV_FONT_MONTSERRAT_8  0
 #define LV_FONT_MONTSERRAT_10 0
 #define LV_FONT_MONTSERRAT_12 0
-#define LV_FONT_MONTSERRAT_14 0
+#define LV_FONT_MONTSERRAT_14 1
 #define LV_FONT_MONTSERRAT_16 0
 #define LV_FONT_MONTSERRAT_18 0
 #define LV_FONT_MONTSERRAT_20 1
@@ -631,7 +631,7 @@
  *  #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)
  *  @endcode
  */
-#define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(lv_font_fira_code_32) LV_FONT_DECLARE(lv_font_fira_code_20)
+#define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(lv_font_fira_code_32) LV_FONT_DECLARE(lv_font_fira_code_20) LV_FONT_DECLARE(lv_font_fira_code_14)
 
 /** Always set a default font */
 #define LV_FONT_DEFAULT &lv_font_fira_code_32
