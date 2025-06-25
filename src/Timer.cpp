@@ -12,6 +12,7 @@ Timer::Timer() {
     label = lv_label_create(btn);
     lv_label_set_text(label, "00.0");
     lv_obj_align(label, LV_ALIGN_LEFT_MID, 8, 0);
+    lv_obj_set_style_text_font(label, &lv_font_fira_code_32, LV_STATE_DEFAULT);
 
     startTime = std::chrono::steady_clock::now();
 }

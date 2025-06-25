@@ -49,7 +49,6 @@ LvglState::LvglState(const char* titleText) {
         lv_label_set_text(label, labelText);
         lv_obj_center(label);
         lv_obj_set_style_pad_all(label, 0, LV_STATE_DEFAULT);
-        lv_obj_set_style_text_font(label, &lv_font_fira_code_20, LV_STATE_DEFAULT);
         lv_obj_set_style_flex_grow(btn, 1, LV_STATE_DEFAULT);
     }
 }

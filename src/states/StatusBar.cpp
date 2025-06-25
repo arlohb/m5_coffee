@@ -15,11 +15,9 @@ StatusBar::StatusBar() {
 
     timeLabel = lv_label_create(bar);
     lv_obj_align(timeLabel, LV_ALIGN_LEFT_MID, 16, 0);
-    lv_obj_set_style_text_font(timeLabel, &lv_font_fira_code_20, LV_STATE_DEFAULT);
 
     batteryLabel = lv_label_create(bar);
     lv_obj_align(batteryLabel, LV_ALIGN_RIGHT_MID, -48, 0);
-    lv_obj_set_style_text_font(batteryLabel, &lv_font_fira_code_20, LV_STATE_DEFAULT);
 
     offBtn = lv_btn_create(bar);
     lv_obj_align(offBtn, LV_ALIGN_RIGHT_MID, -2, 0);

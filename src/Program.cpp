@@ -66,7 +66,7 @@ void Program::setupTheme() {
         lv_palette_main(LV_PALETTE_PINK),
         lv_palette_main(LV_PALETTE_LIGHT_BLUE),
         true,
-        &lv_font_fira_code_32
+        &lv_font_fira_code_20
     );
     lv_display_set_theme(display, theme);
 }
