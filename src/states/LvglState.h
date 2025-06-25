@@ -5,12 +5,12 @@
 
 class LvglState : public State {
 public:
-    LvglState(const char* titleText);
+    LvglState(const char* titleText, bool padding = true);
     ~LvglState() override;
 
     State* loop() override;
 
-private:
+protected:
     StatusBar statusBar;
     
     lv_obj_t* root;

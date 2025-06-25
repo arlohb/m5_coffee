@@ -12,4 +12,5 @@ public:
     State* loop() override;
 
 private:
+    lv_obj_t* table;
 };
