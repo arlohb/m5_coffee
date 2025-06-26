@@ -123,7 +123,7 @@ void Program::loop() {
 
     State* newState = state->loop();
     if (newState) {
-        state = std::unique_ptr<State>(newState);
+        state.reset(newState);
     }
 
     delay(1);
