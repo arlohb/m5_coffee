@@ -50,7 +50,8 @@ void Timer::update() {
     if (!running) return;
 
     auto now = std::chrono::steady_clock::now();
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - startTime).count();
+    elapsedTime = now - startTime;
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
     lv_label_set_text(label, fmt::format("{:02}.{:01}", ms / 1000, ms % 1000 / 100).c_str());
 }
@@ -65,4 +66,9 @@ void Timer::start() {
 void Timer::stop() {
     if (!running) return;
     running = false;
+}
+
+float Timer::getElapsedSeconds() const {
+    int64_t ms = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+    return ms / 1000.0f;
 }

@@ -17,9 +17,11 @@ public:
     void start();
     void stop();
     bool isRunning() const { return running; }
+    float getElapsedSeconds() const;
 
 private:
     std::chrono::time_point<std::chrono::steady_clock> startTime;
+    std::chrono::steady_clock::duration elapsedTime;
     bool running = false;
 
 public:
