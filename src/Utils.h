@@ -1,5 +1,6 @@
 #pragma once
 
+#undef B1
 #include <fmt/core.h>
 #include <M5Unified.h>
 
