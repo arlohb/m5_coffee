@@ -70,11 +70,14 @@ StateTransition HistoryState::loop() {
         
         lv_table_set_row_count(table, brews.size() + 1);
         for (size_t i = 0; i < brews.size(); ++i) {
-            lv_table_set_cell_value(table, i+1, 0, fmt::format("{:g}", brews[i].in).c_str());
-            lv_table_set_cell_value(table, i+1, 1, fmt::format("{:g}", brews[i].ratio).c_str());
-            lv_table_set_cell_value(table, i+1, 2, fmt::format("{:g}", brews[i].aimOut).c_str());
-            lv_table_set_cell_value(table, i+1, 3, fmt::format("{:g}", brews[i].actualOut).c_str());
-            lv_table_set_cell_value(table, i+1, 4, fmt::format("{:g}", brews[i].brewTime).c_str());
+            // Reverse order
+            int row = brews.size() - i;
+
+            lv_table_set_cell_value(table, row, 0, fmt::format("{:g}", brews[i].in).c_str());
+            lv_table_set_cell_value(table, row, 1, fmt::format("{:g}", brews[i].ratio).c_str());
+            lv_table_set_cell_value(table, row, 2, fmt::format("{:g}", brews[i].aimOut).c_str());
+            lv_table_set_cell_value(table, row, 3, fmt::format("{:g}", brews[i].actualOut).c_str());
+            lv_table_set_cell_value(table, row, 4, fmt::format("{:g}", brews[i].brewTime).c_str());
         }
     }
 
