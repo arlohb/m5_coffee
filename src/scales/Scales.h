@@ -60,4 +60,8 @@ private:
     static const uint8_t JUMP_TO_BOOTLOADER_REG = 0xFD;
     static const uint8_t FIRMWARE_VERSION_REG = 0xFE;
     static const uint8_t I2C_ADDRESS_REG = 0xFF;
+    
+    static const bool calibrateOnStart = false;
+    static constexpr float calibrationWeight = 203.0f;
+    void calibrate();
 };

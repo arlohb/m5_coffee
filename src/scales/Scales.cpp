@@ -13,6 +13,13 @@ Scales::Scales() {
     if (error) {
         dbgln("Scales not found at address 0x{:02X}, error code: {}", _addr, error);
     }
+
+    dbgln("Scales loaded : firmware version: v{}", getFirmwareVersion());
+    
+    setLEDColor(0x000000);
+    setOffset();
+    
+    if (calibrateOnStart) calibrate();
 }
 
 Scales::~Scales() {
@@ -225,4 +232,25 @@ void Scales::jumpBootloader(void) {
     uint8_t value = 1;
 
     writeBytes(_addr, JUMP_TO_BOOTLOADER_REG, (uint8_t *)&value, 1);
+}
+
+void Scales::calibrate() {
+    const float originalGapValue = getGapValue();
+
+    dbgln("Calibrating scales...");
+    
+    setOffset();
+    delay(1000);
+    int32_t rawAdc0 = getRawADC();
+    
+    dbgln("Place {}g weight on scales", calibrationWeight);
+    delay(5000);
+    int32_t rawAdc1 = getRawADC();
+    
+    dbgln("Raw ADC values: {} (0g), {} ({}g)", rawAdc0, rawAdc1, calibrationWeight);
+    
+    float gapValue = (float)(std::abs(rawAdc1 - rawAdc0)) / calibrationWeight;
+    setGapValue(gapValue);
+    
+    dbgln("Calibration complete, gap value set to {} (was {})", gapValue, originalGapValue);
 }

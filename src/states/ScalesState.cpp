@@ -3,14 +3,6 @@
 #include "../Utils.h"
 
 ScalesState::ScalesState() : LvglState("Scales") {
-    dbgln("Scales firmware version: v{}", scales.getFirmwareVersion());
-    
-    scales.setLEDColor(0x000000);
-    scales.setOffset();
-    scales.setAvgFilter(10);
-    
-    if (calibrateOnStart) calibrate();
-    
     xTaskCreate([] (void* arg) {
         ScalesState* state = static_cast<ScalesState*>(arg);
         Scales* scales = &state->scales;
@@ -50,26 +42,4 @@ State* ScalesState::loop() {
     lv_label_set_text(weightLabel, fmt::format("{:04.1f}g", weight.load()).c_str());
 
     return nullptr;
-}
-
-void ScalesState::calibrate() {
-    const int calibrationWeightG = 203;
-    const float originalGapValue = scales.getGapValue();
-
-    dbgln("Calibrating scales...");
-    
-    scales.setOffset();
-    delay(1000);
-    int32_t rawAdc0 = scales.getRawADC();
-    
-    dbgln("Place {}g weight on scales", calibrationWeightG);
-    delay(5000);
-    int32_t rawAdc1 = scales.getRawADC();
-    
-    dbgln("Raw ADC values: {} (0g), {} ({}g)", rawAdc0, rawAdc1, calibrationWeightG);
-    
-    float gapValue = (float)(std::abs(rawAdc1 - rawAdc0)) / calibrationWeightG;
-    scales.setGapValue(gapValue);
-    
-    dbgln("Calibration complete, gap value set to {} (was {})", gapValue, originalGapValue);
 }
