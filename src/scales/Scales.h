@@ -6,12 +6,13 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <M5Unified.h>
 
 class Scales {
 public:
-    bool begin(TwoWire *wire = &Wire, uint8_t sda = 21, uint8_t scl = 22,
-               uint8_t addr = DEVICE_DEFAULT_ADDR);
-    bool stop();
+    Scales();
+    ~Scales();
+
     // SCALES
     int32_t getRawADC();
     float getWeight();
@@ -38,10 +39,10 @@ public:
     uint8_t getEmaFilter(void);
 
 private:
-    uint8_t _addr;
-    TwoWire *_wire;
-    uint8_t _sda;
-    uint8_t _scl;
+    uint8_t _addr = DEVICE_DEFAULT_ADDR;
+    TwoWire *_wire = &Wire;
+    uint8_t _sda = M5.Ex_I2C.getSDA();
+    uint8_t _scl = M5.Ex_I2C.getSCL();
     bool writeBytes(uint8_t addr, uint8_t reg, uint8_t *buffer, uint8_t length);
     bool readBytes(uint8_t addr, uint8_t reg, uint8_t *buffer, uint8_t length);
 

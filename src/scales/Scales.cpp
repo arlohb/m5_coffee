@@ -3,26 +3,22 @@
 // Modified by Arlo Blythe
 
 #include "Scales.h"
+#include "../Utils.h"
 
-bool Scales::begin(TwoWire *wire, uint8_t sda, uint8_t scl, uint8_t addr) {
-    _wire = wire;
-    _addr = addr;
-    _sda  = sda;
-    _scl  = scl;
+Scales::Scales() {
     _wire->begin(_sda, _scl, 400000UL);
     delay(10);
     _wire->beginTransmission(_addr);
     uint8_t error = _wire->endTransmission();
-    if (error == 0) {
-        return true;
-    } else {
-        return false;
+    if (error) {
+        dbgln("Scales not found at address 0x{:02X}, error code: {}", _addr, error);
     }
 }
 
-bool Scales::stop() {
-    uint8_t error = _wire->end();
-    return error == 0;
+Scales::~Scales() {
+    if (!_wire->end()) {
+        dbgln("Error ending I2C communication");
+    }
 }
 
 bool Scales::writeBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,

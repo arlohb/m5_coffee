@@ -3,11 +3,6 @@
 #include "../Utils.h"
 
 ScalesState::ScalesState() : LvglState("Scales") {
-    while (!scales.begin(&Wire, M5.Ex_I2C.getSDA(), M5.Ex_I2C.getSCL())) {
-        dbgln("Scales not found, retrying...");
-        delay(500);
-    }
-    
     dbgln("Scales firmware version: v{}", scales.getFirmwareVersion());
     
     scales.setLEDColor(0x000000);
@@ -46,7 +41,6 @@ ScalesState::ScalesState() : LvglState("Scales") {
 
 ScalesState::~ScalesState() {
     vTaskDelete(loopTask);
-    scales.stop();
 }
 
 State* ScalesState::loop() {
