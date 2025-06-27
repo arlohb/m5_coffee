@@ -1,10 +1,5 @@
 #include "LvglState.h"
 
-#include "BrewState.h"
-#include "HistoryState.h"
-#include "ScalesState.h"
-#include <utility>
-
 LvglState::LvglState(const char* titleText, bool padding) {
     root = lv_obj_create(lv_scr_act());
     lv_obj_set_size(root, LV_HOR_RES, LV_VER_RES - StatusBar::HEIGHT);
