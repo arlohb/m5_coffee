@@ -6,7 +6,7 @@
 
 HistoryState::HistoryState() : LvglState("History", false) {
     lv_obj_t* nextBtn = lv_btn_create(root);
-    lv_obj_align(nextBtn, LV_ALIGN_TOP_LEFT, 4, 4);
+    lv_obj_align(nextBtn, LV_ALIGN_TOP_RIGHT, -4, 4);
     lv_obj_set_size(nextBtn, 100, 40);
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
         LOG_INFO("Next button clicked");
@@ -79,7 +79,7 @@ StateTransition HistoryState::loop() {
 void HistoryState::setupSelector() {
     // Create selector
     coffeeSelector = lv_dropdown_create(root);
-    lv_obj_align(coffeeSelector, LV_ALIGN_TOP_RIGHT, -4, 4);
+    lv_obj_align(coffeeSelector, LV_ALIGN_TOP_LEFT, 4, 4);
     lv_obj_set_size(coffeeSelector, 208, 40);
     lv_dropdown_set_symbol(coffeeSelector, "");
     lv_dropdown_clear_options(coffeeSelector);
