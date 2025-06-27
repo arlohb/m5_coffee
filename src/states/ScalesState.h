@@ -2,7 +2,7 @@
 
 #include <atomic>
 #include "LvglState.h"
-#include "../scales/Scales.h"
+#include "../scales/ScalesTask.h"
 
 class ScalesState : public LvglState {
 public:
@@ -12,10 +12,7 @@ public:
     State* loop() override;
 
 private:
-    Scales scales;
-    std::atomic<float> weight = 0.0f;
-    
-    TaskHandle_t loopTask = nullptr;
+    ScalesTask scales;
     
     lv_obj_t* weightLabel;
 };
