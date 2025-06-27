@@ -28,7 +28,10 @@ LvglState::~LvglState() {
 }
 
 StateTransition LvglState::loop() {
-    if (stateTransition) return stateTransition;
+    {
+        std::lock_guard<std::mutex> lock(stateTransitionMutex);
+        if (stateTransition) return stateTransition;
+    }
 
     statusBar.loop();
     

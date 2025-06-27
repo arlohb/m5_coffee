@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include "State.h"
 #include "StatusBar.h"
 
@@ -14,7 +15,9 @@ protected:
     StatusBar statusBar;
     
     lv_obj_t* root;
-    
-    // Only needs to be in the class as button callbacks need to access it
+
+    /// Mutex for the state transition.
+    /// Only needs to be used when setting stateTransition from a different thread,
+    std::mutex stateTransitionMutex;
     StateTransition stateTransition = std::nullopt;
 };
