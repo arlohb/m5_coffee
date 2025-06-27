@@ -14,7 +14,6 @@ protected:
     StatusBar statusBar;
     
     lv_obj_t* root;
-    lv_obj_t* stateSwitcher;
     
     // Only needs to be in the class as button callbacks need to access it
     StateTransition stateTransition = std::nullopt;

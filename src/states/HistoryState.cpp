@@ -1,6 +1,7 @@
 #include "HistoryState.h"
 
 #include <fmt/core.h>
+#include <WiFi.h>
 #include "InScalesState.h"
 #include "../Utils.h"
 
@@ -26,7 +27,7 @@ HistoryState::HistoryState() : LvglState("History", false) {
     lv_obj_align(table, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_text_font(table, &lv_font_fira_code_14, LV_PART_ITEMS);
     lv_obj_set_style_pad_all(table, 5, LV_PART_ITEMS);
-    lv_obj_set_size(table, lv_pct(100), 128);
+    lv_obj_set_size(table, lv_pct(100), 160);
     
     const int colWidth = LV_HOR_RES / 5 - 2;
     lv_table_set_col_cnt(table, 5);
@@ -43,6 +44,9 @@ HistoryState::HistoryState() : LvglState("History", false) {
     
     
     xTaskCreate([](void* arg) {
+        // Wait for WiFi to connect
+        while (WiFi.status() != WL_CONNECTED) delay(100);
+
         LOG_INFO("Loading coffees...");
         HistoryState* state = static_cast<HistoryState*>(arg);
         state->coffees = CoffeeDB::getCoffees();
