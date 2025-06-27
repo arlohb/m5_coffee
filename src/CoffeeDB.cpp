@@ -42,7 +42,7 @@ JsonDocument CoffeeDB::httpGet(const std::string& url) {
 
     int code = http.GET();
     if (code != HTTP_CODE_OK) {
-        dbgln("HTTP GET failed with code: {}", code);
+        LOG_INFO("HTTP GET failed with code: {}", code);
         http.end();
         return JsonDocument();
     }

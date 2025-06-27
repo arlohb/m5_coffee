@@ -77,7 +77,7 @@ void Program::setupNetworkTask(void* arg) {
     while (WiFi.status() != WL_CONNECTED)
         delay(100);
 
-    dbgln("Getting NTP time...");
+    LOG_INFO("Getting NTP time...");
 
     configTime(0, 3600, "pool.ntp.org", "time.nist.gov");
 
@@ -100,18 +100,18 @@ Program::Program() :
     config.fallback_board = m5::board_t::board_M5StackCore2;
     M5.begin(config);
 
-    dbgln("Starting WiFi task...");
+    LOG_INFO("Starting WiFi task...");
     xTaskCreate(setupNetworkTask, "WiFiTask", 4096, nullptr, 1, nullptr);
 
-    dbgln("Setup M5");
+    LOG_INFO("Setup M5");
 
-    dbgln("Setting up lvgl display...");
+    LOG_INFO("Setting up lvgl display...");
     setupDisplay();
-    dbgln("Setting up lvgl input...");
+    LOG_INFO("Setting up lvgl input...");
     setupInput();
-    dbgln("Setting up lvgl theme...");
+    LOG_INFO("Setting up lvgl theme...");
     setupTheme();
-    dbgln("Setup done");
+    LOG_INFO("Setup done");
 
     state = std::make_unique<BrewState>();
 }
@@ -123,10 +123,10 @@ void Program::loop() {
 
     StateTransition stateTransition = state->loop();
     if (stateTransition) {
-        dbgln("Transitioning to new state...");
-        dbgln("Deleting old state...");
+        LOG_INFO("Transitioning to new state...");
+        LOG_INFO("Deleting old state...");
         state.reset();
-        dbgln("Creating new state...");
+        LOG_INFO("Creating new state...");
         state = std::unique_ptr<State>(stateTransition.value()());
     }
 

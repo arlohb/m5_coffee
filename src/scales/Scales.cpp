@@ -11,10 +11,10 @@ Scales::Scales() {
     _wire->beginTransmission(_addr);
     uint8_t error = _wire->endTransmission();
     if (error) {
-        dbgln("Scales not found at address 0x{:02X}, error code: {}", _addr, error);
+        LOG_INFO("Scales not found at address 0x{:02X}, error code: {}", _addr, error);
     }
 
-    dbgln("Scales loaded : firmware version: v{}", getFirmwareVersion());
+    LOG_INFO("Scales loaded : firmware version: v{}", getFirmwareVersion());
     
     setLEDColor(0x000000);
     setOffset();
@@ -24,9 +24,9 @@ Scales::Scales() {
 
 Scales::~Scales() {
     if (!_wire->end()) {
-        dbgln("Error ending I2C communication");
+        LOG_INFO("Error ending I2C communication");
     } else {
-        dbgln("Scales I2C communication ended successfully");
+        LOG_INFO("Scales I2C communication ended successfully");
     }
 }
 
@@ -239,20 +239,20 @@ void Scales::jumpBootloader(void) {
 void Scales::calibrate() {
     const float originalGapValue = getGapValue();
 
-    dbgln("Calibrating scales...");
+    LOG_INFO("Calibrating scales...");
     
     setOffset();
     delay(1000);
     int32_t rawAdc0 = getRawADC();
     
-    dbgln("Place {}g weight on scales", calibrationWeight);
+    LOG_INFO("Place {}g weight on scales", calibrationWeight);
     delay(5000);
     int32_t rawAdc1 = getRawADC();
     
-    dbgln("Raw ADC values: {} (0g), {} ({}g)", rawAdc0, rawAdc1, calibrationWeight);
+    LOG_INFO("Raw ADC values: {} (0g), {} ({}g)", rawAdc0, rawAdc1, calibrationWeight);
     
     float gapValue = (float)(std::abs(rawAdc1 - rawAdc0)) / calibrationWeight;
     setGapValue(gapValue);
     
-    dbgln("Calibration complete, gap value set to {} (was {})", gapValue, originalGapValue);
+    LOG_INFO("Calibration complete, gap value set to {} (was {})", gapValue, originalGapValue);
 }

@@ -9,7 +9,7 @@ HistoryState::HistoryState() : LvglState("History", false) {
     lv_obj_align(nextBtn, LV_ALIGN_TOP_LEFT, 4, 4);
     lv_obj_set_size(nextBtn, 100, 40);
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
-        dbgln("Next button clicked");
+        LOG_INFO("Next button clicked");
         HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
         
         std::string selectedCoffee;
@@ -43,11 +43,11 @@ HistoryState::HistoryState() : LvglState("History", false) {
     
     
     xTaskCreate([](void* arg) {
-        dbgln("Loading coffees...");
+        LOG_INFO("Loading coffees...");
         HistoryState* state = static_cast<HistoryState*>(arg);
         state->coffees = CoffeeDB::getCoffees();
         state->coffeesLoaded = true;
-        dbgln("Coffees loaded: {}", state->coffees.size());
+        LOG_INFO("Coffees loaded: {}", state->coffees.size());
         
         vTaskDelete(nullptr);
     }, "get_coffees", 8 * 1024, this, 1, nullptr);
@@ -88,7 +88,7 @@ void HistoryState::setupSelector() {
     
     // Reload brews when a coffee is selected
     lv_obj_add_event_cb(coffeeSelector, [](lv_event_t* e) {
-        dbgln("Coffee selected");
+        LOG_INFO("Coffee selected");
 
         HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
         
@@ -106,13 +106,13 @@ void HistoryState::setupSelector() {
         
         // Start loading brews
         xTaskCreate([](void* arg) {
-            dbgln("Loading brews");
+            LOG_INFO("Loading brews");
 
             HistoryState* state = static_cast<HistoryState*>(arg);
             state->brews = CoffeeDB::get(state->selectedCoffee);
             state->brewsLoaded = true;
             
-            dbgln("Brews loaded: {}", state->brews.size());
+            LOG_INFO("Brews loaded: {}", state->brews.size());
             
             vTaskDelete(nullptr);
         }, "get_brews", 8 * 1024, state, 1, nullptr);

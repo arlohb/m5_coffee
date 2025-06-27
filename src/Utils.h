@@ -4,16 +4,13 @@
 #include <fmt/core.h>
 #include <M5Unified.h>
 
-template<typename... T>
-static void dbg(fmt::format_string<T...> fmt, T&&... args) {
-    // Ignores log levels, could be improved
-    M5.Log.print(fmt::format(fmt, args...).c_str());
-};
+namespace __detail {
+    std::string getMethodName(const char* prettyFunction);
+}
 
-template<typename... T>
-static void dbgln(fmt::format_string<T...> fmt, T&&... args) {
-    // Ignores log levels, could be improved
-    M5.Log.println(fmt::format(fmt, args...).c_str());
-};
-
-#define dbgval(expr) dbgln(#expr": {}", expr)
+#define LOG_INFO(fmt_str, ...) { \
+    std::string tag = __detail::getMethodName(__PRETTY_FUNCTION__); \
+\
+    std::string str = fmt::format(fmt_str, ##__VA_ARGS__); \
+    ESP_LOGI(tag.c_str(), "%s", str.c_str()); \
+}
