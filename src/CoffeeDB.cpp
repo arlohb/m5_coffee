@@ -36,6 +36,29 @@ std::vector<Brew> CoffeeDB::get(const std::string& coffee) {
     return brews;
 }
 
+void CoffeeDB::add(Brew brew) {
+    JsonDocument doc;
+    doc["timestamp"] = brew.timestamp;
+    doc["coffee"] = brew.coffee;
+    doc["in"] = brew.in;
+    doc["ratio"] = brew.ratio;
+    doc["actual_out"] = brew.actualOut;
+    doc["brew_time"] = brew.brewTime;
+
+    HTTPClient http;
+    http.begin(String(secrets::coffeeDbEndpoint) + "/add");
+    http.addHeader("Content-Type", "application/json");
+
+    uint8_t buffer[512];
+    size_t len = serializeJson(doc, buffer, sizeof(buffer));
+    int code = http.POST(buffer, len);
+    if (code != HTTP_CODE_OK) {
+        LOG_INFO("HTTP POST failed with code: {}", code);
+    }
+
+    http.end();
+}
+
 JsonDocument CoffeeDB::httpGet(const std::string& url) {
     HTTPClient http;
     http.begin(url.c_str());

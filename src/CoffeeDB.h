@@ -22,6 +22,8 @@ public:
     static std::vector<std::string> getCoffees();
     
     static std::vector<Brew> get(const std::string& coffee);
+    
+    static void add(Brew brew);
 
 private:
     static JsonDocument httpGet(const std::string& url);
