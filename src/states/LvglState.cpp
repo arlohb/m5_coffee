@@ -2,6 +2,7 @@
 
 #include "MainState.h"
 #include "HistoryState.h"
+#include "ScalesState.h"
 #include <utility>
 
 LvglState::LvglState(const char* titleText, bool padding) {
@@ -40,9 +41,16 @@ LvglState::LvglState(const char* titleText, bool padding) {
         *newState = new HistoryState();
     }, LV_EVENT_PRESSED, &newState);
     
+    lv_obj_t* scalesBtn = lv_btn_create(stateSwitcher);
+    lv_obj_add_event_cb(scalesBtn, [] (lv_event_t* e) {
+        State** newState = (State**)lv_event_get_user_data(e);
+        *newState = new ScalesState();
+    }, LV_EVENT_PRESSED, &newState);
+    
     std::pair<lv_obj_t*, const char*> btns[] = {
         {mainBtn, "Main"},
-        {historyBtn, "History"}
+        {historyBtn, "History"},
+        {scalesBtn, "Scales"}
     };
 
     for (auto& [btn, labelText] : btns) {
