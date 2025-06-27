@@ -68,6 +68,7 @@ StateTransition HistoryState::loop() {
     if (brewsLoaded.load()) {
         brewsLoaded = false;
         
+        lv_table_set_row_count(table, brews.size() + 1);
         for (size_t i = 0; i < brews.size(); ++i) {
             lv_table_set_cell_value(table, i+1, 0, fmt::format("{:g}", brews[i].in).c_str());
             lv_table_set_cell_value(table, i+1, 1, fmt::format("{:g}", brews[i].ratio).c_str());
@@ -98,11 +99,7 @@ void HistoryState::setupSelector() {
         HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
         
         // Clear table
-        for (int i = 1; i < lv_table_get_row_cnt(state->table); ++i) {
-            for (int j = 0; j < lv_table_get_col_cnt(state->table); ++j) {
-                lv_table_set_cell_value(state->table, i, j, "");
-            }
-        }
+        lv_table_set_row_count(state->table, 1);
 
         // Set selected coffee
         char selectedCoffee[64];
