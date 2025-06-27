@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <string>
+#include <ArduinoJson.h>
+#undef B1
 
 struct Brew {
     unsigned long timestamp;
@@ -20,4 +22,7 @@ public:
     static std::vector<std::string> getCoffees();
     
     static std::vector<Brew> get(const std::string& coffee);
+
+private:
+    static JsonDocument httpGet(const std::string& url);
 };

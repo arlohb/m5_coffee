@@ -1,16 +1,9 @@
 #include "HistoryState.h"
 
 #include <fmt/core.h>
-#include "../CoffeeDB.h"
+#include "../Utils.h"
 
 HistoryState::HistoryState() : LvglState("History", false) {
-    lv_obj_t* coffeSelector = lv_dropdown_create(root);
-    lv_obj_align(coffeSelector, LV_ALIGN_TOP_RIGHT, 0, 0);
-    lv_dropdown_clear_options(coffeSelector);
-    for (const auto& coffee : CoffeeDB::getCoffees()) {
-        lv_dropdown_add_option(coffeSelector, coffee.c_str(), LV_DROPDOWN_POS_LAST);
-    }
-    
     table = lv_table_create(root);
     lv_obj_align(table, LV_ALIGN_BOTTOM_MID, 0, -32);
     lv_obj_set_style_text_font(table, &lv_font_fira_code_14, LV_PART_ITEMS);
@@ -30,22 +23,80 @@ HistoryState::HistoryState() : LvglState("History", false) {
     lv_table_set_cell_value(table, 0, 4, "Brew Time (s)");
     lv_table_set_col_width(table, 4, colWidth);
     
-    char selectedCoffee[64];
-    lv_dropdown_get_selected_str(coffeSelector, selectedCoffee, sizeof(selectedCoffee));
-    std::vector<Brew> brews = CoffeeDB::get(selectedCoffee);
     
-    for (size_t i = 0; i < brews.size(); ++i) {
-        lv_table_set_cell_value(table, i+1, 0, fmt::format("{:g}", brews[i].in).c_str());
-        lv_table_set_cell_value(table, i+1, 1, fmt::format("{:g}", brews[i].ratio).c_str());
-        lv_table_set_cell_value(table, i+1, 2, fmt::format("{:g}", brews[i].aimOut).c_str());
-        lv_table_set_cell_value(table, i+1, 3, fmt::format("{:g}", brews[i].actualOut).c_str());
-        lv_table_set_cell_value(table, i+1, 4, fmt::format("{:g}", brews[i].brewTime).c_str());
-    }
+    xTaskCreate([](void* arg) {
+        dbgln("Loading coffees...");
+        HistoryState* state = static_cast<HistoryState*>(arg);
+        state->coffees = CoffeeDB::getCoffees();
+        state->coffeesLoaded = true;
+        dbgln("Coffees loaded: {}", state->coffees.size());
+        
+        vTaskDelete(nullptr);
+    }, "get_coffees", 8 * 1024, this, 1, nullptr);
 }
 
 State* HistoryState::loop() {
     State* newState = LvglState::loop();
     if (newState) return newState;
     
+    if (!coffeeSelector && coffeesLoaded.load()) {
+        setupSelector();
+    }
+    
+    if (brewsLoaded.load()) {
+        brewsLoaded = false;
+        
+        for (size_t i = 0; i < brews.size(); ++i) {
+            lv_table_set_cell_value(table, i+1, 0, fmt::format("{:g}", brews[i].in).c_str());
+            lv_table_set_cell_value(table, i+1, 1, fmt::format("{:g}", brews[i].ratio).c_str());
+            lv_table_set_cell_value(table, i+1, 2, fmt::format("{:g}", brews[i].aimOut).c_str());
+            lv_table_set_cell_value(table, i+1, 3, fmt::format("{:g}", brews[i].actualOut).c_str());
+            lv_table_set_cell_value(table, i+1, 4, fmt::format("{:g}", brews[i].brewTime).c_str());
+        }
+    }
+
     return nullptr;
+}
+
+void HistoryState::setupSelector() {
+    // Create selector
+    coffeeSelector = lv_dropdown_create(root);
+    lv_obj_align(coffeeSelector, LV_ALIGN_TOP_LEFT, 120, 4);
+    lv_obj_set_size(coffeeSelector, LV_HOR_RES - 120 - 4, LV_SIZE_CONTENT);
+    lv_dropdown_clear_options(coffeeSelector);
+    for (const auto& coffee : CoffeeDB::getCoffees()) {
+        lv_dropdown_add_option(coffeeSelector, coffee.c_str(), LV_DROPDOWN_POS_LAST);
+    }
+    
+    // Reload brews when a coffee is selected
+    lv_obj_add_event_cb(coffeeSelector, [](lv_event_t* e) {
+        dbgln("Coffee selected");
+
+        HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
+        
+        // Clear table
+        for (int i = 1; i < lv_table_get_row_cnt(state->table); ++i) {
+            for (int j = 0; j < lv_table_get_col_cnt(state->table); ++j) {
+                lv_table_set_cell_value(state->table, i, j, "");
+            }
+        }
+
+        // Set selected coffee
+        char selectedCoffee[64];
+        lv_dropdown_get_selected_str(state->coffeeSelector, selectedCoffee, sizeof(selectedCoffee));
+        state->selectedCoffee = selectedCoffee;
+        
+        // Start loading brews
+        xTaskCreate([](void* arg) {
+            dbgln("Loading brews");
+
+            HistoryState* state = static_cast<HistoryState*>(arg);
+            state->brews = CoffeeDB::get(state->selectedCoffee);
+            state->brewsLoaded = true;
+            
+            dbgln("Brews loaded: {}", state->brews.size());
+            
+            vTaskDelete(nullptr);
+        }, "get_brews", 8 * 1024, state, 1, nullptr);
+    }, LV_EVENT_VALUE_CHANGED, this);
 }
