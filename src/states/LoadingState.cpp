@@ -2,6 +2,6 @@
 
 LoadingState::LoadingState() {}
 
-State* LoadingState::loop() {
-    return nullptr;
+StateTransition LoadingState::loop() {
+    return std::nullopt;
 }

@@ -25,6 +25,8 @@ Scales::Scales() {
 Scales::~Scales() {
     if (!_wire->end()) {
         dbgln("Error ending I2C communication");
+    } else {
+        dbgln("Scales I2C communication ended successfully");
     }
 }
 

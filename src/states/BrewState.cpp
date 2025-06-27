@@ -6,11 +6,11 @@ BrewState::BrewState() : LvglState("Brew") {
     timer.registerOnPress();
 }
 
-State* BrewState::loop() {
-    State* newState = LvglState::loop();
-    if (newState) return newState;
+StateTransition BrewState::loop() {
+    StateTransition stateTransition = LvglState::loop();
+    if (stateTransition) return stateTransition;
 
     timer.update();
     
-    return nullptr;
+    return std::nullopt;
 }

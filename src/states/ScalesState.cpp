@@ -23,11 +23,11 @@ ScalesState::ScalesState() : LvglState("Scales") {
 
 ScalesState::~ScalesState() {}
 
-State* ScalesState::loop() {
-    State* newState = LvglState::loop();
-    if (newState) return newState;
+StateTransition ScalesState::loop() {
+    StateTransition stateTransition = LvglState::loop();
+    if (stateTransition) return stateTransition;
     
     lv_label_set_text(weightLabel, fmt::format("{:04.1f}g", scales.getWeight()).c_str());
 
-    return nullptr;
+    return std::nullopt;
 }

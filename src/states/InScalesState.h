@@ -1,17 +1,18 @@
 #pragma once
 
-#include <atomic>
 #include "LvglState.h"
 #include "../scales/ScalesTask.h"
 
-class ScalesState : public LvglState {
+class InScalesState : public LvglState {
 public:
-    ScalesState();
-    ~ScalesState() override;
+    InScalesState(const std::string& selectedCoffee);
+    ~InScalesState() override = default;
 
     StateTransition loop() override;
 
 private:
+    std::string selectedCoffee;
+    
     ScalesTask scales;
     
     lv_obj_t* weightLabel;

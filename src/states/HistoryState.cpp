@@ -1,7 +1,7 @@
 #include "HistoryState.h"
 
 #include <fmt/core.h>
-#include "ScalesState.h"
+#include "InScalesState.h"
 #include "../Utils.h"
 
 HistoryState::HistoryState() : LvglState("History", false) {
@@ -12,7 +12,10 @@ HistoryState::HistoryState() : LvglState("History", false) {
         dbgln("Next button clicked");
         HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
         
-        state->newState = new ScalesState();
+        std::string selectedCoffee;
+        state->stateTransition = [=]() {
+            return new InScalesState(selectedCoffee);
+        };
     }, LV_EVENT_CLICKED, this);
     
     lv_obj_t* nextLabel = lv_label_create(nextBtn);
@@ -50,9 +53,9 @@ HistoryState::HistoryState() : LvglState("History", false) {
     }, "get_coffees", 8 * 1024, this, 1, nullptr);
 }
 
-State* HistoryState::loop() {
-    State* newState = LvglState::loop();
-    if (newState) return newState;
+StateTransition HistoryState::loop() {
+    StateTransition stateTransition = LvglState::loop();
+    if (stateTransition) return stateTransition;
     
     if (!coffeeSelector && coffeesLoaded.load()) {
         setupSelector();
@@ -70,7 +73,7 @@ State* HistoryState::loop() {
         }
     }
 
-    return nullptr;
+    return std::nullopt;
 }
 
 void HistoryState::setupSelector() {

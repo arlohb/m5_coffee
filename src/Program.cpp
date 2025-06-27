@@ -121,9 +121,13 @@ void Program::loop() {
 
     lv_timer_handler();
 
-    State* newState = state->loop();
-    if (newState) {
-        state.reset(newState);
+    StateTransition stateTransition = state->loop();
+    if (stateTransition) {
+        dbgln("Transitioning to new state...");
+        dbgln("Deleting old state...");
+        state.reset();
+        dbgln("Creating new state...");
+        state = std::unique_ptr<State>(stateTransition.value()());
     }
 
     delay(1);

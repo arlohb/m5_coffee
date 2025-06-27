@@ -31,21 +31,27 @@ LvglState::LvglState(const char* titleText, bool padding) {
     
     lv_obj_t* brewBtn = lv_btn_create(stateSwitcher);
     lv_obj_add_event_cb(brewBtn, [] (lv_event_t* e) {
-        State** newState = (State**)lv_event_get_user_data(e);
-        *newState = new BrewState();
-    }, LV_EVENT_PRESSED, &newState);
+        StateTransition* stateTransition = (StateTransition*)lv_event_get_user_data(e);
+        *stateTransition = ([] () {
+            return (State*)new BrewState();
+        });
+    }, LV_EVENT_PRESSED, &stateTransition);
     
     lv_obj_t* historyBtn = lv_btn_create(stateSwitcher);
     lv_obj_add_event_cb(historyBtn, [] (lv_event_t* e) {
-        State** newState = (State**)lv_event_get_user_data(e);
-        *newState = new HistoryState();
-    }, LV_EVENT_PRESSED, &newState);
+        StateTransition* stateTransition = (StateTransition*)lv_event_get_user_data(e);
+        *stateTransition = [] () {
+            return (State*)new HistoryState();
+        };
+    }, LV_EVENT_PRESSED, &stateTransition);
     
     lv_obj_t* scalesBtn = lv_btn_create(stateSwitcher);
     lv_obj_add_event_cb(scalesBtn, [] (lv_event_t* e) {
-        State** newState = (State**)lv_event_get_user_data(e);
-        *newState = new ScalesState();
-    }, LV_EVENT_PRESSED, &newState);
+        StateTransition* stateTransition = (StateTransition*)lv_event_get_user_data(e);
+        *stateTransition = [] () {
+            return (State*)new ScalesState();
+        };
+    }, LV_EVENT_PRESSED, &stateTransition);
     
     std::pair<lv_obj_t*, const char*> btns[] = {
         {brewBtn, "Brew"},
@@ -70,10 +76,10 @@ LvglState::~LvglState() {
     lv_obj_delete(stateSwitcher);
 }
 
-State* LvglState::loop() {
-    if (newState) return newState;
+StateTransition LvglState::loop() {
+    if (stateTransition) return stateTransition;
 
     statusBar.loop();
     
-    return nullptr;
+    return std::nullopt;
 }

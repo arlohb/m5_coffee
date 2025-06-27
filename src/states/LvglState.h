@@ -8,7 +8,7 @@ public:
     LvglState(const char* titleText, bool padding = true);
     ~LvglState() override;
 
-    State* loop() override;
+    StateTransition loop() override;
 
 protected:
     StatusBar statusBar;
@@ -17,5 +17,5 @@ protected:
     lv_obj_t* stateSwitcher;
     
     // Only needs to be in the class as button callbacks need to access it
-    State* newState = nullptr;
+    StateTransition stateTransition = std::nullopt;
 };

@@ -6,5 +6,5 @@ class LoadingState : public State {
 public:
     LoadingState();
 
-    State* loop() override;
+    StateTransition loop() override;
 };
