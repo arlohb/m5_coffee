@@ -113,7 +113,7 @@ Program::Program() :
     setupTheme();
     LOG_INFO("Setup done");
 
-    state = std::make_unique<BrewState>();
+    state = std::make_unique<BrewState>("test", 17.0f);
 }
 
 void Program::loop() {

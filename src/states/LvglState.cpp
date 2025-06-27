@@ -35,7 +35,7 @@ LvglState::LvglState(const char* titleText, bool padding) {
     lv_obj_add_event_cb(brewBtn, [] (lv_event_t* e) {
         StateTransition* stateTransition = (StateTransition*)lv_event_get_user_data(e);
         *stateTransition = ([] () {
-            return (State*)new BrewState();
+            return (State*)new BrewState("test", 17.0f);
         });
     }, LV_EVENT_PRESSED, &stateTransition);
     

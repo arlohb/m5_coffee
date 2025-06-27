@@ -30,8 +30,11 @@ InScalesState::InScalesState(const std::string& selectedCoffee) :
     lv_obj_align(nextBtn, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
         InScalesState* state = static_cast<InScalesState*>(lv_event_get_user_data(e));
-        state->stateTransition = []() {
-            return new BrewState();
+        
+        std::string selectedCoffee = state->selectedCoffee;
+        float weight = state->scales.getWeight();
+        state->stateTransition = [=]() {
+            return new BrewState(selectedCoffee, weight);
         };
     }, LV_EVENT_PRESSED, this);
     
