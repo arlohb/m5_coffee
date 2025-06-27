@@ -1,6 +1,6 @@
 #include "LvglState.h"
 
-#include "MainState.h"
+#include "BrewState.h"
 #include "HistoryState.h"
 #include "ScalesState.h"
 #include <utility>
@@ -29,10 +29,10 @@ LvglState::LvglState(const char* titleText, bool padding) {
     lv_obj_set_size(stateSwitcher, lv_pct(100), 32);
     lv_obj_set_style_pad_all(stateSwitcher, 2, LV_STATE_DEFAULT);
     
-    lv_obj_t* mainBtn = lv_btn_create(stateSwitcher);
-    lv_obj_add_event_cb(mainBtn, [] (lv_event_t* e) {
+    lv_obj_t* brewBtn = lv_btn_create(stateSwitcher);
+    lv_obj_add_event_cb(brewBtn, [] (lv_event_t* e) {
         State** newState = (State**)lv_event_get_user_data(e);
-        *newState = new MainState();
+        *newState = new BrewState();
     }, LV_EVENT_PRESSED, &newState);
     
     lv_obj_t* historyBtn = lv_btn_create(stateSwitcher);
@@ -48,7 +48,7 @@ LvglState::LvglState(const char* titleText, bool padding) {
     }, LV_EVENT_PRESSED, &newState);
     
     std::pair<lv_obj_t*, const char*> btns[] = {
-        {mainBtn, "Main"},
+        {brewBtn, "Brew"},
         {historyBtn, "History"},
         {scalesBtn, "Scales"}
     };

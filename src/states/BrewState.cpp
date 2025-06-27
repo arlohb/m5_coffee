@@ -1,12 +1,12 @@
-#include "MainState.h"
+#include "BrewState.h"
 
 #include <M5Unified.h>
 
-MainState::MainState() : LvglState("Main") {
+BrewState::BrewState() : LvglState("Brew") {
     timer.registerOnPress();
 }
 
-State* MainState::loop() {
+State* BrewState::loop() {
     State* newState = LvglState::loop();
     if (newState) return newState;
 

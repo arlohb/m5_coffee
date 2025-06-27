@@ -5,7 +5,7 @@
 #include <M5UnitLCD.h>
 #include "Secrets.h"
 #include "states/LoadingState.h"
-#include "states/MainState.h"
+#include "states/BrewState.h"
 
 void Program::setupDisplay() {
     lv_init();
@@ -113,7 +113,7 @@ Program::Program() :
     setupTheme();
     dbgln("Setup done");
 
-    state = std::make_unique<MainState>();
+    state = std::make_unique<BrewState>();
 }
 
 void Program::loop() {

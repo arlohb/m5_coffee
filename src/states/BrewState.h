@@ -5,10 +5,10 @@
 #include "Timer.h"
 #include "StatusBar.h"
 
-class MainState : public LvglState {
+class BrewState : public LvglState {
 public:
-    MainState();
-    ~MainState() override = default;
+    BrewState();
+    ~BrewState() override = default;
 
     State* loop() override;
 
