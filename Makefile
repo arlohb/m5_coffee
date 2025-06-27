@@ -5,7 +5,7 @@ upload:
 	pio run --target upload
 
 serial:
-	pio device monitor --baud 115200
+	pio device monitor
 
 uploadserial:
 	make upload
