@@ -13,7 +13,7 @@ HistoryState::HistoryState() : LvglState("History", false) {
         LOG_INFO("Next button clicked");
         HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
         
-        std::string selectedCoffee;
+        std::string selectedCoffee = state->selectedCoffee;
         state->stateTransition = [=]() {
             return new InScalesState(selectedCoffee);
         };
