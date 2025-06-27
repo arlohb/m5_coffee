@@ -14,7 +14,7 @@ InScalesState::InScalesState(const std::string& selectedCoffee) :
     lv_obj_set_style_text_font(weightLabel, &lv_font_fira_code_32, 0);
     
     lv_obj_t* zero = lv_btn_create(root);
-    lv_obj_set_size(zero, 80, 48);
+    lv_obj_set_size(zero, 80, 40);
     lv_obj_align(zero, LV_ALIGN_RIGHT_MID, 0, 0);
     lv_obj_add_event_cb(zero, [] (lv_event_t* e) {
         InScalesState* state = static_cast<InScalesState*>(lv_event_get_user_data(e));
@@ -26,7 +26,7 @@ InScalesState::InScalesState(const std::string& selectedCoffee) :
     lv_obj_center(zeroLabel);
     
     lv_obj_t* nextBtn = lv_btn_create(root);
-    lv_obj_set_size(nextBtn, 80, 48);
+    lv_obj_set_size(nextBtn, 80, 40);
     lv_obj_align(nextBtn, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
         InScalesState* state = static_cast<InScalesState*>(lv_event_get_user_data(e));

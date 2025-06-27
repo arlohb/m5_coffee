@@ -6,9 +6,11 @@
 #include <utility>
 
 LvglState::LvglState(const char* titleText, bool padding) {
+    const int stateSwitcherHeight = 32;
+
     root = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(root, LV_HOR_RES, LV_VER_RES - StatusBar::HEIGHT);
-    lv_obj_align(root, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_size(root, LV_HOR_RES, LV_VER_RES - StatusBar::HEIGHT - stateSwitcherHeight);
+    lv_obj_align(root, LV_ALIGN_BOTTOM_MID, 0, -stateSwitcherHeight);
     lv_obj_set_style_bg_opa(root, LV_OPA_TRANSP, LV_STATE_DEFAULT);
     lv_obj_set_style_border_side(root, LV_BORDER_SIDE_NONE, LV_STATE_DEFAULT);
     lv_obj_set_style_pad_all(root, padding ? 16 : 0, LV_STATE_DEFAULT);
@@ -26,7 +28,7 @@ LvglState::LvglState(const char* titleText, bool padding) {
     lv_obj_align(stateSwitcher, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_layout(stateSwitcher, LV_LAYOUT_FLEX, LV_STATE_DEFAULT);
     lv_obj_set_style_flex_flow(stateSwitcher, LV_FLEX_FLOW_ROW, LV_STATE_DEFAULT);
-    lv_obj_set_size(stateSwitcher, lv_pct(100), 32);
+    lv_obj_set_size(stateSwitcher, lv_pct(100), stateSwitcherHeight);
     lv_obj_set_style_pad_all(stateSwitcher, 2, LV_STATE_DEFAULT);
     
     lv_obj_t* brewBtn = lv_btn_create(stateSwitcher);

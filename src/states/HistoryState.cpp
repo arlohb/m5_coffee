@@ -23,10 +23,10 @@ HistoryState::HistoryState() : LvglState("History", false) {
     lv_obj_center(nextLabel);
 
     table = lv_table_create(root);
-    lv_obj_align(table, LV_ALIGN_BOTTOM_MID, 0, -32);
+    lv_obj_align(table, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_text_font(table, &lv_font_fira_code_14, LV_PART_ITEMS);
     lv_obj_set_style_pad_all(table, 5, LV_PART_ITEMS);
-    lv_obj_set_size(table, lv_pct(100), lv_pct(60));
+    lv_obj_set_size(table, lv_pct(100), 128);
     
     const int colWidth = LV_HOR_RES / 5 - 2;
     lv_table_set_col_cnt(table, 5);
@@ -79,8 +79,9 @@ StateTransition HistoryState::loop() {
 void HistoryState::setupSelector() {
     // Create selector
     coffeeSelector = lv_dropdown_create(root);
-    lv_obj_align(coffeeSelector, LV_ALIGN_TOP_LEFT, 120, 4);
-    lv_obj_set_size(coffeeSelector, LV_HOR_RES - 120 - 4, LV_SIZE_CONTENT);
+    lv_obj_align(coffeeSelector, LV_ALIGN_TOP_RIGHT, -4, 4);
+    lv_obj_set_size(coffeeSelector, 208, 40);
+    lv_dropdown_set_symbol(coffeeSelector, "");
     lv_dropdown_clear_options(coffeeSelector);
     for (const auto& coffee : CoffeeDB::getCoffees()) {
         lv_dropdown_add_option(coffeeSelector, coffee.c_str(), LV_DROPDOWN_POS_LAST);
