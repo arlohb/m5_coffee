@@ -7,7 +7,7 @@ Timer::Timer() {
     auto root = lv_scr_act();
     btn = lv_btn_create(root);
     lv_obj_align(btn, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_size(btn, 120, 80);
+    lv_obj_set_size(btn, 128, 64);
     
     label = lv_label_create(btn);
     lv_label_set_text(label, "00.0");
