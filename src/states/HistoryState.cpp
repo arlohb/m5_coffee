@@ -1,9 +1,24 @@
 #include "HistoryState.h"
 
 #include <fmt/core.h>
+#include "ScalesState.h"
 #include "../Utils.h"
 
 HistoryState::HistoryState() : LvglState("History", false) {
+    lv_obj_t* nextBtn = lv_btn_create(root);
+    lv_obj_align(nextBtn, LV_ALIGN_TOP_LEFT, 4, 4);
+    lv_obj_set_size(nextBtn, 100, 40);
+    lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
+        dbgln("Next button clicked");
+        HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
+        
+        state->newState = new ScalesState();
+    }, LV_EVENT_CLICKED, this);
+    
+    lv_obj_t* nextLabel = lv_label_create(nextBtn);
+    lv_label_set_text(nextLabel, "Next");
+    lv_obj_center(nextLabel);
+
     table = lv_table_create(root);
     lv_obj_align(table, LV_ALIGN_BOTTOM_MID, 0, -32);
     lv_obj_set_style_text_font(table, &lv_font_fira_code_14, LV_PART_ITEMS);
