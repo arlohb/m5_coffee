@@ -6,6 +6,8 @@
 
 class LvglState : public State {
 public:
+    static const int32_t PADDING = 16;
+
     LvglState(const char* titleText, bool padding = true);
     ~LvglState() override;
 

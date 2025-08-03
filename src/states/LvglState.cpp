@@ -6,7 +6,7 @@ LvglState::LvglState(const char* titleText, bool padding) {
     lv_obj_align(root, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_style_bg_opa(root, LV_OPA_TRANSP, LV_STATE_DEFAULT);
     lv_obj_set_style_border_side(root, LV_BORDER_SIDE_NONE, LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_all(root, padding ? 16 : 0, LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_all(root, padding ? PADDING : 0, LV_STATE_DEFAULT);
 
     lv_obj_t* title = lv_label_create(root);
     lv_label_set_text(title, titleText);
@@ -14,7 +14,7 @@ LvglState::LvglState(const char* titleText, bool padding) {
     if (padding) {
         lv_obj_align(title, LV_ALIGN_TOP_LEFT, 0, 0);
     } else {
-        lv_obj_align(title, LV_ALIGN_TOP_LEFT, 16, 16);
+        lv_obj_align(title, LV_ALIGN_TOP_LEFT, PADDING, PADDING);
     }
 }
 
