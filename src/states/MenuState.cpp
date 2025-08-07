@@ -1,7 +1,7 @@
 #include "MenuState.h"
 
 #include "HistoryState.h"
-#include "InScalesState.h"
+#include "ScalesState.h"
 #include "../Utils.h"
 
 MenuState::MenuState() : LvglState("m5_coffee", false) {
@@ -42,7 +42,7 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
         MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
 
         state->stateTransition = []() {
-            return new InScalesState([](float _weight) {
+            return new ScalesState([](float _weight) {
                 return []() { return new MenuState(); };
             });
         };

@@ -1,10 +1,10 @@
-#include "InScalesState.h"
+#include "ScalesState.h"
 
 #undef B1
 #include <fmt/core.h>
 #include "BrewState.h"
 
-InScalesState::InScalesState(std::function<StateTransition(float)> next):
+ScalesState::ScalesState(std::function<StateTransition(float)> next):
     LvglState("In Scales", true),
     nextStateTransition(next)
 {
@@ -12,7 +12,7 @@ InScalesState::InScalesState(std::function<StateTransition(float)> next):
     lv_obj_set_size(weightBtn, 128, 64);
     lv_obj_align(weightBtn, LV_ALIGN_CENTER, 0, 16);
     lv_obj_add_event_cb(weightBtn, [] (lv_event_t* e) {
-        InScalesState* state = static_cast<InScalesState*>(lv_event_get_user_data(e));
+        ScalesState* state = static_cast<ScalesState*>(lv_event_get_user_data(e));
         state->scales.zero();
     }, LV_EVENT_PRESSED, this);
 
@@ -25,7 +25,7 @@ InScalesState::InScalesState(std::function<StateTransition(float)> next):
     lv_obj_set_size(nextBtn, 80, 40);
     lv_obj_align(nextBtn, LV_ALIGN_TOP_RIGHT, 0, 0);
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
-        InScalesState* state = static_cast<InScalesState*>(lv_event_get_user_data(e));
+        ScalesState* state = static_cast<ScalesState*>(lv_event_get_user_data(e));
         
         float weight = state->scales.getWeight();
         state->stateTransition = state->nextStateTransition(weight);
@@ -36,7 +36,7 @@ InScalesState::InScalesState(std::function<StateTransition(float)> next):
     lv_obj_center(nextLabel);
 }
 
-std::optional<StateTransition> InScalesState::loop() {
+std::optional<StateTransition> ScalesState::loop() {
     auto stateTransition = LvglState::loop();
     if (stateTransition) return stateTransition;
 

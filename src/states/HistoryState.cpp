@@ -2,7 +2,7 @@
 
 #include <fmt/core.h>
 #include <WiFi.h>
-#include "InScalesState.h"
+#include "ScalesState.h"
 #include "BrewState.h"
 #include "../Utils.h"
 
@@ -16,7 +16,7 @@ HistoryState::HistoryState() : LvglState("History", false) {
         
         std::string selectedCoffee = state->selectedCoffee;
         state->stateTransition = [=]() {
-            return new InScalesState([selectedCoffee](float weight) {
+            return new ScalesState([selectedCoffee](float weight) {
                 return [selectedCoffee, weight]() {
                     return new BrewState(selectedCoffee, weight);
                 };

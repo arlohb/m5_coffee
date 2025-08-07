@@ -3,10 +3,10 @@
 #include "LvglState.h"
 #include "../scales/ScalesTask.h"
 
-class InScalesState : public LvglState {
+class ScalesState : public LvglState {
 public:
-    InScalesState(std::function<StateTransition(float weight)> next);
-    ~InScalesState() override = default;
+    ScalesState(std::function<StateTransition(float weight)> next);
+    ~ScalesState() override = default;
 
     std::optional<StateTransition> loop() override;
 
