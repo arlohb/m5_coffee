@@ -3,7 +3,7 @@
 #include <fmt/core.h>
 #include <WiFi.h>
 #include "ScalesState.h"
-#include "BrewState.h"
+#include "GrindState.h"
 #include "../Utils.h"
 
 HistoryState::HistoryState(const std::string& selectedCoffee) :
@@ -16,12 +16,13 @@ HistoryState::HistoryState(const std::string& selectedCoffee) :
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
         LOG_INFO("Next button clicked");
         HistoryState* state = static_cast<HistoryState*>(lv_event_get_user_data(e));
-        
+        // State won't exist during state transition, so need to copy
         std::string selectedCoffee = state->selectedCoffee;
-        state->stateTransition = [=]() {
+
+        state->stateTransition = [selectedCoffee]() {
             return new ScalesState([selectedCoffee](float weight) {
                 return [selectedCoffee, weight]() {
-                    return new BrewState(selectedCoffee, weight);
+                    return new GrindState(selectedCoffee, weight);
                 };
             });
         };

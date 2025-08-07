@@ -36,9 +36,11 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
     
     createBtn("Esp", [](lv_event_t* e) {
         MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
-        
-        state->stateTransition = [state]() {
-            return new HistoryState(state->selectedCoffee);
+        // State won't exist during state transition, so need to copy
+        std::string selectedCoffee = state->selectedCoffee;
+
+        state->stateTransition = [selectedCoffee]() {
+            return new HistoryState(selectedCoffee);
         };
     });
     

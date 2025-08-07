@@ -11,6 +11,7 @@ public:
     BrewState(
         const std::string& selectedCoffee,
         float inWeight,
+        int grindSize,
         float ratio = 2.5f
     );
     ~BrewState() override = default;
@@ -24,6 +25,7 @@ private:
     
     std::string selectedCoffee;
     float inWeight;
+    int grindSize;
     float ratio;
     float targetWeight;
     

@@ -5,6 +5,7 @@
 #include <M5Unified.h>
 #include "../CoffeeDB.h"
 #include "MenuState.h"
+#include "../Utils.h"
 
 float roundToDp(float value, int dp) {
     float factor = std::pow(10.0f, dp);
@@ -14,11 +15,13 @@ float roundToDp(float value, int dp) {
 BrewState::BrewState(
     const std::string& selectedCoffee,
     float inWeight,
+    int grindSize,
     float ratio
 ) :
     LvglState("Brew"),
     selectedCoffee(selectedCoffee),
     inWeight(inWeight),
+    grindSize(grindSize),
     ratio(ratio),
     targetWeight(inWeight * ratio)
 {
