@@ -7,15 +7,6 @@ LvglState::LvglState(const char* titleText, bool padding) {
     lv_obj_set_style_bg_opa(root, LV_OPA_TRANSP, LV_STATE_DEFAULT);
     lv_obj_set_style_border_side(root, LV_BORDER_SIDE_NONE, LV_STATE_DEFAULT);
     lv_obj_set_style_pad_all(root, padding ? PADDING : 0, LV_STATE_DEFAULT);
-
-    lv_obj_t* title = lv_label_create(root);
-    lv_label_set_text(title, titleText);
-    // If main widget isn't padded, pad manually
-    if (padding) {
-        lv_obj_align(title, LV_ALIGN_TOP_LEFT, 0, 0);
-    } else {
-        lv_obj_align(title, LV_ALIGN_TOP_LEFT, PADDING, PADDING);
-    }
 }
 
 LvglState::~LvglState() {
