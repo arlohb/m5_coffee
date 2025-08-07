@@ -5,7 +5,11 @@
 #include "../Utils.h"
 #include <WiFi.h>
 
+std::atomic<bool> MenuState::isMenuLoaded = false;
+
 MenuState::MenuState() : LvglState("m5_coffee", false) {
+    isMenuLoaded = true;
+
     lv_obj_t* btnRow = lv_obj_create(root);
     lv_obj_remove_style_all(btnRow);
     lv_obj_set_style_pad_all(btnRow, LvglState::PADDING, 0);
@@ -51,15 +55,27 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
     xTaskCreate([](void* arg) {
         // Wait for WiFi to connect
         while (WiFi.status() != WL_CONNECTED) delay(100);
+        
+        std::vector<std::string> coffees = CoffeeDB::getCoffees();
+        
+        // If menu has unloaded, exit
+        if (!MenuState::isMenuLoaded) {
+            vTaskDelete(nullptr);
+            return;
+        }
 
         LOG_INFO("Loading coffees...");
         MenuState* state = static_cast<MenuState*>(arg);
-        state->coffees = CoffeeDB::getCoffees();
+        state->coffees = coffees;
         state->coffeesLoaded = true;
         LOG_INFO("Coffees loaded: {}", state->coffees.size());
         
         vTaskDelete(nullptr);
     }, "get_coffees", 8 * 1024, this, 1, nullptr);
+}
+
+MenuState::~MenuState() {
+    isMenuLoaded = false;
 }
 
 std::optional<StateTransition> MenuState::loop() {
