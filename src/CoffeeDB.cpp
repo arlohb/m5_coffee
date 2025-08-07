@@ -28,6 +28,7 @@ std::vector<Brew> CoffeeDB::get(const std::string& coffee) {
         b.ratio = brew["ratio"] | 0.0f;
         b.aimOut = brew["aim_out"] | 0.0f;
         b.actualOut = brew["actual_out"] | 0.0f;
+        b.grind = brew["grind"] | 0;
         b.brewTime = brew["brew_time"] | 0.0f;
 
         brews.push_back(b);
@@ -43,6 +44,7 @@ void CoffeeDB::add(Brew brew) {
     doc["in"] = brew.in;
     doc["ratio"] = brew.ratio;
     doc["actual_out"] = brew.actualOut;
+    doc["grind"] = brew.grind;
     doc["brew_time"] = brew.brewTime;
 
     HTTPClient http;

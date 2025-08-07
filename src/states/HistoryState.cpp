@@ -38,8 +38,8 @@ HistoryState::HistoryState(const std::string& selectedCoffee) :
     lv_obj_set_style_pad_all(table, 5, LV_PART_ITEMS);
     lv_obj_set_size(table, lv_pct(100), 160);
     
-    const int colWidth = LV_HOR_RES / 5 - 2;
-    lv_table_set_col_cnt(table, 5);
+    const int colWidth = LV_HOR_RES / 6 - 2;
+    lv_table_set_col_cnt(table, 6);
     lv_table_set_cell_value(table, 0, 0, "In (g)");
     lv_table_set_col_width(table, 0, colWidth);
     lv_table_set_cell_value(table, 0, 1, "Ratio");
@@ -48,8 +48,10 @@ HistoryState::HistoryState(const std::string& selectedCoffee) :
     lv_table_set_col_width(table, 2, colWidth);
     lv_table_set_cell_value(table, 0, 3, "Actual Out (g)");
     lv_table_set_col_width(table, 3, colWidth);
-    lv_table_set_cell_value(table, 0, 4, "Brew Time (s)");
+    lv_table_set_cell_value(table, 0, 4, "Grind");
     lv_table_set_col_width(table, 4, colWidth);
+    lv_table_set_cell_value(table, 0, 5, "Brew Time (s)");
+    lv_table_set_col_width(table, 5, colWidth);
 
     // Start loading brews
     xTaskCreate([](void* arg) {
@@ -81,7 +83,8 @@ std::optional<StateTransition> HistoryState::loop() {
             lv_table_set_cell_value(table, row, 1, fmt::format("{:g}", brews[i].ratio).c_str());
             lv_table_set_cell_value(table, row, 2, fmt::format("{:g}", brews[i].aimOut).c_str());
             lv_table_set_cell_value(table, row, 3, fmt::format("{:g}", brews[i].actualOut).c_str());
-            lv_table_set_cell_value(table, row, 4, fmt::format("{:g}", brews[i].brewTime).c_str());
+            lv_table_set_cell_value(table, row, 4, fmt::format("{}", brews[i].grind).c_str());
+            lv_table_set_cell_value(table, row, 5, fmt::format("{:g}", brews[i].brewTime).c_str());
         }
     }
 

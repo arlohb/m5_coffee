@@ -12,6 +12,7 @@ struct Brew {
     float ratio;
     float aimOut;
     float actualOut;
+    int grind;
     float brewTime;
 };
 

@@ -65,6 +65,7 @@ BrewState::BrewState(
                 .ratio = state->ratio,
                 .aimOut = roundToDp(state->targetWeight, 2),
                 .actualOut = roundToDp(state->scales.getWeight(), 1),
+                .grind = state->grindSize,
                 .brewTime = roundToDp(state->timer.getElapsedSeconds(), 1),
             });
 
