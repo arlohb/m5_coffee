@@ -5,14 +5,14 @@
 
 class InScalesState : public LvglState {
 public:
-    InScalesState(const std::string& selectedCoffee);
+    InScalesState(std::function<StateTransition(float weight)> next);
     ~InScalesState() override = default;
 
     std::optional<StateTransition> loop() override;
 
 private:
-    std::string selectedCoffee;
-    
+    std::function<StateTransition(float weight)> nextStateTransition;
+
     ScalesTask scales;
     
     lv_obj_t* weightLabel;

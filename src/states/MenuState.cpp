@@ -1,6 +1,7 @@
 #include "MenuState.h"
 
 #include "HistoryState.h"
+#include "InScalesState.h"
 #include "../Utils.h"
 
 MenuState::MenuState() : LvglState("m5_coffee", false) {
@@ -38,8 +39,14 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
 
     lv_obj_t* scalesBtn = lv_btn_create(btnRow);
     lv_obj_add_event_cb(scalesBtn, [](lv_event_t* e) {
-        LOG_INFO("Scales button clicked");
-    }, LV_EVENT_CLICKED, nullptr);
+        MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
+
+        state->stateTransition = []() {
+            return new InScalesState([](float _weight) {
+                return []() { return new MenuState(); };
+            });
+        };
+    }, LV_EVENT_CLICKED, this);
     lv_obj_set_flex_grow(scalesBtn, 1);
 
     lv_obj_t* scalesLabel = lv_label_create(scalesBtn);

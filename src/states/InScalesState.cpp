@@ -4,9 +4,9 @@
 #include <fmt/core.h>
 #include "BrewState.h"
 
-InScalesState::InScalesState(const std::string& selectedCoffee) :
+InScalesState::InScalesState(std::function<StateTransition(float)> next):
     LvglState("In Scales", true),
-    selectedCoffee(selectedCoffee)
+    nextStateTransition(next)
 {
     lv_obj_t* weightBtn = lv_btn_create(root);
     lv_obj_set_size(weightBtn, 128, 64);
@@ -27,11 +27,8 @@ InScalesState::InScalesState(const std::string& selectedCoffee) :
     lv_obj_add_event_cb(nextBtn, [](lv_event_t* e) {
         InScalesState* state = static_cast<InScalesState*>(lv_event_get_user_data(e));
         
-        std::string selectedCoffee = state->selectedCoffee;
         float weight = state->scales.getWeight();
-        state->stateTransition = [=]() {
-            return new BrewState(selectedCoffee, weight);
-        };
+        state->stateTransition = state->nextStateTransition(weight);
     }, LV_EVENT_PRESSED, this);
     
     lv_obj_t* nextLabel = lv_label_create(nextBtn);
