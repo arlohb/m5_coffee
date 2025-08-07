@@ -12,46 +12,40 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
     lv_obj_set_layout(btnRow, LV_LAYOUT_FLEX);
     lv_obj_set_style_pad_column(btnRow, 8, 0);
     lv_obj_remove_flag(btnRow, LV_OBJ_FLAG_SCROLLABLE);
+    
+    auto createBtn = [this, btnRow](const char* label, lv_event_cb_t eventCb) {
+        lv_obj_t* btn = lv_btn_create(btnRow);
+        lv_obj_add_event_cb(btn, eventCb, LV_EVENT_CLICKED, this);
+        lv_obj_set_flex_grow(btn, 1);
 
-    lv_obj_t* v60Btn = lv_btn_create(btnRow);
-    lv_obj_add_event_cb(v60Btn, [](lv_event_t* e) {
+        lv_obj_t* labelObj = lv_label_create(btn);
+        lv_label_set_text(labelObj, label);
+        lv_obj_center(labelObj);
+
+        return btn;
+    };
+    
+    createBtn("V60", [](lv_event_t* e) {
         LOG_INFO("V60 button clicked");
-    }, LV_EVENT_CLICKED, nullptr);
-    lv_obj_set_flex_grow(v60Btn, 1);
-
-    lv_obj_t* v60Label = lv_label_create(v60Btn);
-    lv_label_set_text(v60Label, "V60");
-    lv_obj_center(v60Label);
-
-    lv_obj_t* espressoBtn = lv_btn_create(btnRow);
-    lv_obj_add_event_cb(espressoBtn, [](lv_event_t* e) {
+    });
+    
+    createBtn("Esp", [](lv_event_t* e) {
         MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
         
         state->stateTransition = []() {
             return new HistoryState();
         };
-    }, LV_EVENT_CLICKED, this);
-    lv_obj_set_flex_grow(espressoBtn, 1);
-
-    lv_obj_t* espressoLabel = lv_label_create(espressoBtn);
-    lv_label_set_text(espressoLabel, "Esp");
-    lv_obj_center(espressoLabel);
-
-    lv_obj_t* scalesBtn = lv_btn_create(btnRow);
-    lv_obj_add_event_cb(scalesBtn, [](lv_event_t* e) {
+    });
+    
+    createBtn("Scales", [](lv_event_t* e) {
         MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
-
+        
         state->stateTransition = []() {
             return new ScalesState([](float _weight) {
                 return []() { return new MenuState(); };
             });
         };
-    }, LV_EVENT_CLICKED, this);
-    lv_obj_set_flex_grow(scalesBtn, 1);
-
-    lv_obj_t* scalesLabel = lv_label_create(scalesBtn);
-    lv_label_set_text(scalesLabel, "Scales");
-    lv_obj_center(scalesLabel);
+    });
 }
 
 std::optional<StateTransition> MenuState::loop() {
