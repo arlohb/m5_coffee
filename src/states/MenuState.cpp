@@ -47,8 +47,8 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
     lv_obj_center(scalesLabel);
 }
 
-StateTransition MenuState::loop() {
-    StateTransition stateTransition = LvglState::loop();
+std::optional<StateTransition> MenuState::loop() {
+    auto stateTransition = LvglState::loop();
     if (stateTransition) return stateTransition;
 
     return std::nullopt;

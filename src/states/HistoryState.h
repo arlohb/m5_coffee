@@ -13,7 +13,7 @@ class HistoryState : public LvglState {
 public:
     HistoryState();
 
-    StateTransition loop() override;
+    std::optional<StateTransition> loop() override;
 
 private:
     lv_obj_t* coffeeSelector = nullptr;

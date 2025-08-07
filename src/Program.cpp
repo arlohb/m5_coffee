@@ -121,7 +121,7 @@ void Program::loop() {
 
     lv_timer_handler();
 
-    StateTransition stateTransition = state->loop();
+    std::optional<StateTransition> stateTransition = state->loop();
     if (stateTransition) {
         LOG_INFO("Transitioning to new state...");
         LOG_INFO("Deleting old state...");

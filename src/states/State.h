@@ -5,11 +5,11 @@
 
 class State;
 
-using StateTransition = std::optional<std::function<State*()>>;
+using StateTransition = std::function<State*()>;
 
 class State {
 public:
     virtual ~State() = default;
     
-    virtual StateTransition loop() = 0;
+    virtual std::optional<StateTransition> loop() = 0;
 };

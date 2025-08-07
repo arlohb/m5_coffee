@@ -6,5 +6,5 @@ class MenuState : public LvglState {
 public:
     MenuState();
     
-    StateTransition loop() override;
+    std::optional<StateTransition> loop() override;
 };

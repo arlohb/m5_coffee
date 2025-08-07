@@ -57,8 +57,8 @@ HistoryState::HistoryState() : LvglState("History", false) {
     }, "get_coffees", 8 * 1024, this, 1, nullptr);
 }
 
-StateTransition HistoryState::loop() {
-    StateTransition stateTransition = LvglState::loop();
+std::optional<StateTransition> HistoryState::loop() {
+    auto stateTransition = LvglState::loop();
     if (stateTransition) return stateTransition;
     
     if (!coffeeSelector && coffeesLoaded.load()) {

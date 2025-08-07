@@ -6,5 +6,5 @@ class LoadingState : public State {
 public:
     LoadingState();
 
-    StateTransition loop() override;
+    std::optional<StateTransition> loop() override;
 };

@@ -80,8 +80,8 @@ BrewState::BrewState(
     lv_obj_center(finishLabel);
 }
 
-StateTransition BrewState::loop() {
-    StateTransition stateTransition = LvglState::loop();
+std::optional<StateTransition> BrewState::loop() {
+    auto stateTransition = LvglState::loop();
     if (stateTransition) return stateTransition;
 
     timer.update();

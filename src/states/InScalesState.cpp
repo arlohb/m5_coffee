@@ -39,8 +39,8 @@ InScalesState::InScalesState(const std::string& selectedCoffee) :
     lv_obj_center(nextLabel);
 }
 
-StateTransition InScalesState::loop() {
-    StateTransition stateTransition = LvglState::loop();
+std::optional<StateTransition> InScalesState::loop() {
+    auto stateTransition = LvglState::loop();
     if (stateTransition) return stateTransition;
 
     lv_label_set_text(weightLabel, fmt::format("{:04.1f}g", scales.getWeight()).c_str());

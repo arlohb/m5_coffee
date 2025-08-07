@@ -15,7 +15,7 @@ public:
     );
     ~BrewState() override = default;
 
-    StateTransition loop() override;
+    std::optional<StateTransition> loop() override;
 
 private:
     Timer timer;

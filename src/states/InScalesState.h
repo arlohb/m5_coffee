@@ -8,7 +8,7 @@ public:
     InScalesState(const std::string& selectedCoffee);
     ~InScalesState() override = default;
 
-    StateTransition loop() override;
+    std::optional<StateTransition> loop() override;
 
 private:
     std::string selectedCoffee;

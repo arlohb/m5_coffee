@@ -13,7 +13,7 @@ LvglState::~LvglState() {
     lv_obj_delete(root);
 }
 
-StateTransition LvglState::loop() {
+std::optional<StateTransition> LvglState::loop() {
     {
         std::lock_guard<std::mutex> lock(stateTransitionMutex);
         if (stateTransition) return stateTransition;
