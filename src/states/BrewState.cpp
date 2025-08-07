@@ -3,7 +3,8 @@
 #undef B1
 #include <fmt/core.h>
 #include <M5Unified.h>
-#include "HistoryState.h"
+#include "../CoffeeDB.h"
+#include "MenuState.h"
 
 float roundToDp(float value, int dp) {
     float factor = std::pow(10.0f, dp);
@@ -67,7 +68,7 @@ BrewState::BrewState(
             {
                 std::lock_guard<std::mutex> lock(state->stateTransitionMutex);
                 state->stateTransition = []() {
-                    return new HistoryState();
+                    return new MenuState();
                 };
             }
             

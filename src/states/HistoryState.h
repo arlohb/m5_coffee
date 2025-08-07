@@ -11,22 +11,16 @@
 
 class HistoryState : public LvglState {
 public:
-    HistoryState();
+    HistoryState(const std::string& selectedCoffee);
 
     std::optional<StateTransition> loop() override;
 
 private:
-    lv_obj_t* coffeeSelector = nullptr;
     lv_obj_t* table;
     
-    /// Stays true after coffees are loaded.
-    std::atomic<bool> coffeesLoaded = false;
-    std::vector<std::string> coffees;
     std::string selectedCoffee;
     
     /// Is only true after brews are loaded and before table is filled.
     std::atomic<bool> brewsLoaded = false;
     std::vector<Brew> brews;
-    
-    void setupSelector();
 };

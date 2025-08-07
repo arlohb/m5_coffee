@@ -3,6 +3,7 @@
 #include "HistoryState.h"
 #include "ScalesState.h"
 #include "../Utils.h"
+#include <WiFi.h>
 
 MenuState::MenuState() : LvglState("m5_coffee", false) {
     lv_obj_t* btnRow = lv_obj_create(root);
@@ -32,8 +33,8 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
     createBtn("Esp", [](lv_event_t* e) {
         MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
         
-        state->stateTransition = []() {
-            return new HistoryState();
+        state->stateTransition = [state]() {
+            return new HistoryState(state->selectedCoffee);
         };
     });
     
@@ -46,11 +47,50 @@ MenuState::MenuState() : LvglState("m5_coffee", false) {
             });
         };
     });
+
+    xTaskCreate([](void* arg) {
+        // Wait for WiFi to connect
+        while (WiFi.status() != WL_CONNECTED) delay(100);
+
+        LOG_INFO("Loading coffees...");
+        MenuState* state = static_cast<MenuState*>(arg);
+        state->coffees = CoffeeDB::getCoffees();
+        state->coffeesLoaded = true;
+        LOG_INFO("Coffees loaded: {}", state->coffees.size());
+        
+        vTaskDelete(nullptr);
+    }, "get_coffees", 8 * 1024, this, 1, nullptr);
 }
 
 std::optional<StateTransition> MenuState::loop() {
     auto stateTransition = LvglState::loop();
     if (stateTransition) return stateTransition;
+    
+    if (coffeesLoaded) {
+        coffeesLoaded = false;
+        
+        lv_obj_t* coffeeSelector = lv_dropdown_create(root);
+        lv_obj_align(coffeeSelector, LV_ALIGN_BOTTOM_LEFT, LvglState::PADDING, -LvglState::PADDING);
+        lv_obj_set_size(coffeeSelector, LV_HOR_RES - 2 * LvglState::PADDING, LV_SIZE_CONTENT);
+        lv_dropdown_set_symbol(coffeeSelector, "");
+        lv_dropdown_clear_options(coffeeSelector);
+        for (const auto& coffee : coffees) {
+            lv_dropdown_add_option(coffeeSelector, coffee.c_str(), LV_DROPDOWN_POS_LAST);
+        }
+        
+        lv_obj_add_event_cb(coffeeSelector, [](lv_event_t* e) {
+            LOG_INFO("Coffee selected");
+
+            MenuState* state = static_cast<MenuState*>(lv_event_get_user_data(e));
+            
+            char selectedCoffee[64];
+            lv_dropdown_get_selected_str(
+                static_cast<lv_obj_t*>(lv_event_get_target(e)),
+                selectedCoffee, sizeof(selectedCoffee)
+            );
+            state->selectedCoffee = selectedCoffee;
+        }, LV_EVENT_VALUE_CHANGED, this);
+    }
 
     return std::nullopt;
 }
