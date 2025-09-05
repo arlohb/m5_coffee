@@ -2,10 +2,10 @@
 // MIT License
 // Modified by Arlo Blythe
 
-#include "Scales.h"
+#include "MiniScales.h"
 #include "../Utils.h"
 
-Scales::Scales() {
+MiniScales::MiniScales() {
     _wire->begin(_sda, _scl, 400000UL);
     delay(10);
     _wire->beginTransmission(_addr);
@@ -22,7 +22,7 @@ Scales::Scales() {
     if (calibrateOnStart) calibrate();
 }
 
-Scales::~Scales() {
+MiniScales::~MiniScales() {
     if (!_wire->end()) {
         LOG_INFO("Error ending I2C communication");
     } else {
@@ -30,7 +30,7 @@ Scales::~Scales() {
     }
 }
 
-bool Scales::writeBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
+bool MiniScales::writeBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
                              uint8_t length) {
     _wire->beginTransmission(addr);
     _wire->write(reg);
@@ -39,7 +39,7 @@ bool Scales::writeBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
     return false;
 }
 
-bool Scales::readBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
+bool MiniScales::readBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
                             uint8_t length) {
     uint8_t index = 0;
     _wire->beginTransmission(addr);
@@ -54,13 +54,13 @@ bool Scales::readBytes(uint8_t addr, uint8_t reg, uint8_t *buffer,
     return false;
 }
 
-uint8_t Scales::getBtnStatus() {
+uint8_t MiniScales::getBtnStatus() {
     uint8_t data = 0;
     readBytes(_addr, BUTTON_REG, &data, 1);
     return data;
 }
 
-bool Scales::setLEDColor(uint32_t colorHEX) {
+bool MiniScales::setLEDColor(uint32_t colorHEX) {
     uint8_t color[4] = {0};
     // RED
     color[0] = (colorHEX >> 16) & 0xff;
@@ -71,13 +71,13 @@ bool Scales::setLEDColor(uint32_t colorHEX) {
     return writeBytes(_addr, RGB_LED_REG, color, 3);
 }
 
-bool Scales::setLPFilter(uint8_t en) {
+bool MiniScales::setLPFilter(uint8_t en) {
     uint8_t reg = FILTER_REG;
 
     return writeBytes(_addr, reg, (uint8_t *)&en, 1);
 }
 
-uint8_t Scales::getLPFilter(void) {
+uint8_t MiniScales::getLPFilter(void) {
     uint8_t data;
     uint8_t reg = FILTER_REG;
 
@@ -86,13 +86,13 @@ uint8_t Scales::getLPFilter(void) {
     return data;
 }
 
-bool Scales::setAvgFilter(uint8_t avg) {
+bool MiniScales::setAvgFilter(uint8_t avg) {
     uint8_t reg = FILTER_REG + 1;
 
     return writeBytes(_addr, reg, (uint8_t *)&avg, 1);
 }
 
-uint8_t Scales::getAvgFilter(void) {
+uint8_t MiniScales::getAvgFilter(void) {
     uint8_t data;
     uint8_t reg = FILTER_REG + 1;
 
@@ -101,13 +101,13 @@ uint8_t Scales::getAvgFilter(void) {
     return data;
 }
 
-bool Scales::setEmaFilter(uint8_t ema) {
+bool MiniScales::setEmaFilter(uint8_t ema) {
     uint8_t reg = FILTER_REG + 2;
 
     return writeBytes(_addr, reg, (uint8_t *)&ema, 1);
 }
 
-uint8_t Scales::getEmaFilter(void) {
+uint8_t MiniScales::getEmaFilter(void) {
     uint8_t data;
     uint8_t reg = FILTER_REG + 2;
 
@@ -116,7 +116,7 @@ uint8_t Scales::getEmaFilter(void) {
     return data;
 }
 
-uint32_t Scales::getLEDColor() {
+uint32_t MiniScales::getLEDColor() {
     uint8_t color[4]  = {0};
     uint32_t colorHEX = 0;
     if (readBytes(_addr, RGB_LED_REG, color, 3)) {
@@ -127,7 +127,7 @@ uint32_t Scales::getLEDColor() {
     return colorHEX;
 }
 
-float Scales::getWeight() {
+float MiniScales::getWeight() {
     uint8_t data[4];
     float c;
     uint8_t *p;
@@ -139,14 +139,14 @@ float Scales::getWeight() {
     return c;
 }
 
-int32_t Scales::getWeightInt() {
+int32_t MiniScales::getWeightInt() {
     uint8_t data[4];
 
     readBytes(_addr, CAL_DATA_INT_REG, data, 4);
     return (data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 }
 
-String Scales::getWeightString() {
+String MiniScales::getWeightString() {
     char *p;
     uint8_t data[16];
     String res;
@@ -157,7 +157,7 @@ String Scales::getWeightString() {
     return res;
 }
 
-float Scales::getGapValue() {
+float MiniScales::getGapValue() {
     uint8_t data[4];
     float c;
     uint8_t *p;
@@ -169,7 +169,7 @@ float Scales::getGapValue() {
     return c;
 }
 
-void Scales::setGapValue(float offset) {
+void MiniScales::setGapValue(float offset) {
     uint8_t datatmp[4];
     uint8_t *p;
     p = (uint8_t *)&offset;
@@ -180,14 +180,14 @@ void Scales::setGapValue(float offset) {
     delay(100);
 }
 
-void Scales::setOffset(void) {
+void MiniScales::setOffset(void) {
     uint8_t datatmp[4];
     datatmp[0] = 1;
 
     writeBytes(_addr, SET_OFFESET_REG, datatmp, 1);
 }
 
-int32_t Scales::getRawADC() {
+int32_t MiniScales::getRawADC() {
     uint8_t data[4] = {0};
     int rawADC      = 0;
     if (readBytes(_addr, RAW_ADC_REG, data, 4)) {
@@ -197,7 +197,7 @@ int32_t Scales::getRawADC() {
     return rawADC;
 }
 
-uint8_t Scales::setI2CAddress(uint8_t addr) {
+uint8_t MiniScales::setI2CAddress(uint8_t addr) {
     _wire->beginTransmission(_addr);
     _wire->write(I2C_ADDRESS_REG);
     _wire->write(addr);
@@ -206,7 +206,7 @@ uint8_t Scales::setI2CAddress(uint8_t addr) {
     return _addr;
 }
 
-uint8_t Scales::getI2CAddress(void) {
+uint8_t MiniScales::getI2CAddress(void) {
     _wire->beginTransmission(_addr);
     _wire->write(I2C_ADDRESS_REG);
     _wire->endTransmission();
@@ -218,7 +218,7 @@ uint8_t Scales::getI2CAddress(void) {
     return RegValue;
 }
 
-uint8_t Scales::getFirmwareVersion(void) {
+uint8_t MiniScales::getFirmwareVersion(void) {
     _wire->beginTransmission(_addr);
     _wire->write(FIRMWARE_VERSION_REG);
     _wire->endTransmission();
@@ -230,13 +230,13 @@ uint8_t Scales::getFirmwareVersion(void) {
     return RegValue;
 }
 
-void Scales::jumpBootloader(void) {
+void MiniScales::jumpBootloader(void) {
     uint8_t value = 1;
 
     writeBytes(_addr, JUMP_TO_BOOTLOADER_REG, (uint8_t *)&value, 1);
 }
 
-void Scales::calibrate() {
+void MiniScales::calibrate() {
     const float originalGapValue = getGapValue();
 
     LOG_INFO("Calibrating scales...");

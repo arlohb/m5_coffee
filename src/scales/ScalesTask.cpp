@@ -1,11 +1,13 @@
 #include "ScalesTask.h"
 
-ScalesTask::ScalesTask() {
+#include "MiniScales.h"
+
+ScalesTask::ScalesTask() : scales(std::make_unique<MiniScales>()) {
     xTaskCreate([](void *arg) {
         ScalesTask *scalesTask = static_cast<ScalesTask*>(arg);
 
         while (true) {
-            scalesTask->weight = scalesTask->scales.getWeight();
+            scalesTask->weight = scalesTask->scales->getWeight();
             delay(200);
         }
     }, "ScalesTask", 2048, this, 1, &taskHandle);
@@ -23,5 +25,5 @@ float ScalesTask::getWeight() const {
 }
 
 void ScalesTask::zero() {
-    scales.setOffset();
+    scales->zero();
 }

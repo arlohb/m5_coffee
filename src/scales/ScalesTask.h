@@ -15,6 +15,6 @@ public:
 private:
     TaskHandle_t taskHandle = nullptr;
     
-    Scales scales;
+    std::unique_ptr<Scales> scales;
     std::atomic<float> weight = 0.0f;
 };
