@@ -1,16 +1,16 @@
 #include "ScalesTask.h"
 
-#include "MiniScales.h"
+#include "HX711Scales.h"
 
-ScalesTask::ScalesTask() : scales(std::make_unique<MiniScales>()) {
+ScalesTask::ScalesTask() : scales(std::make_unique<HX711Scales>()) {
     xTaskCreate([](void *arg) {
         ScalesTask *scalesTask = static_cast<ScalesTask*>(arg);
 
         while (true) {
             scalesTask->weight = scalesTask->scales->getWeight();
-            delay(200);
+            delay(50);
         }
-    }, "ScalesTask", 2048, this, 1, &taskHandle);
+    }, "ScalesTask", 4 * 1024, this, 1, &taskHandle);
 }
 
 ScalesTask::~ScalesTask() {
